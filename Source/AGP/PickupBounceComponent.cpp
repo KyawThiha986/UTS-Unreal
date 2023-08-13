@@ -20,24 +20,36 @@ void UPickupBounceComponent::BeginPlay()
 	Super::BeginPlay();
 
 	StartPos = GetOwner()->GetActorLocation();
-	TargetPos = FVector(StartPos.X, StartPos.Y, StartPos.Z + 100);
-	CurrentAlpha = 0;
+	TargetPos = FVector(StartPos.X, StartPos.Y, StartPos.Z + 50);
+	CurrentAlpha = -0.1f;
+	GoBack = false;
 }
 
 void UPickupBounceComponent::TickBounce(const float& DeltaTime)
 {
-	if (CurrentAlpha <= 0)
+	CurrentPos = GetOwner()->GetActorLocation();
+	CurrentAlpha;
+	CurrentPos = FMath::Lerp(StartPos, TargetPos, CurrentAlpha);
+	CurrentTime += DeltaTime / 2;
+
+	if (CurrentAlpha <= 0.0f)
+	{
+		GoBack = false;
+	}
+	else if (CurrentAlpha >= 1.0f)
+	{
+		GoBack = true;
+	}
+	
+	if (GoBack == false)
 	{
 		CurrentAlpha += DeltaTime / 2;
 	}
-	else if (CurrentAlpha >= 1)
+	else
 	{
 		CurrentAlpha -= DeltaTime / 2;
 	}
-	
-	float LerpAlpha = FMath::Clamp<float>(CurrentAlpha, 0.0f, 1.0f);
-	FVector NewPosition = FMath::Lerp(StartPos, TargetPos, LerpAlpha);
-	GetOwner()->SetActorLocation(NewPosition);
+	GetOwner()->SetActorLocation(CurrentPos);
 }
 
 
