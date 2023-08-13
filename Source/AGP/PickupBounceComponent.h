@@ -27,9 +27,6 @@ public:
 private:
 	UPROPERTY(EditInstanceOnly)
 	float CurrentAlpha;
-	UPROPERTY(EditInstanceOnly)
-	float CurrentTime;
-	float LerpAlpha;
 	bool GoBack;
 	FVector StartPos;
 	FVector CurrentPos;

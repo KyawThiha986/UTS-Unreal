@@ -29,7 +29,6 @@ void UPickupBounceComponent::TickBounce(const float& DeltaTime)
 {
 	CurrentPos = GetOwner()->GetActorLocation();
 	CurrentPos = FMath::Lerp(StartPos, TargetPos, CurrentAlpha);
-	CurrentTime += DeltaTime / 2;
 
 	if (CurrentAlpha <= 0.0f)
 	{
