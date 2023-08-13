@@ -28,7 +28,6 @@ void UPickupBounceComponent::BeginPlay()
 void UPickupBounceComponent::TickBounce(const float& DeltaTime)
 {
 	CurrentPos = GetOwner()->GetActorLocation();
-	CurrentAlpha;
 	CurrentPos = FMath::Lerp(StartPos, TargetPos, CurrentAlpha);
 	CurrentTime += DeltaTime / 2;
 
