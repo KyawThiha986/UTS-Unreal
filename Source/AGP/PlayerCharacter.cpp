@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -15,7 +17,17 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		UEnhancedInputLocalPlayerSubsystem* Subsystem =
+		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>
+		(PlayerController->GetLocalPlayer());
+		if (Subsystem)
+		{
+			Subsystem->AddMappingContext(InputMappingContext, 0);
+		}
+	}
 }
 
 // Called every frame
@@ -29,6 +41,22 @@ void APlayerCharacter::Tick(float DeltaTime)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+	}
+}
 
+void APlayerCharacter::Move(const FInputActionValue& Value)
+{
+	// Retrieves the 
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+	//
+	const FVector ForwardVector = GetActorForwardVector();
+	AddMovementInput(ForwardVector, MovementVector.X);
+	//
+	const FVector RightVector = GetActorRightVector();
+	AddMovementInput(RightVector, MovementVector.Y);
 }
 
