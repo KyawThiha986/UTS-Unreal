@@ -24,6 +24,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* LookAction;
 	UPROPERTY(EditDefaultsOnly)
+	UInputAction* JumpAction;
+	UPROPERTY(EditDefaultsOnly)
 	UInputMappingContext* InputMappingContext;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,5 +39,11 @@ public:
 
 private:
 	void Move(const FInputActionValue& Value);
-	
+
+	void Look(const FInputActionValue& Value);
+
+	UPROPERTY(EditDefaultsOnly)
+	float LookSensitivityX;
+	UPROPERTY(EditDefaultsOnly)
+	float LookSensitivityY;
 };

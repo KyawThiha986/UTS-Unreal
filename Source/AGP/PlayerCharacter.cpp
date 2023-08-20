@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -45,6 +46,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 	}
 }
 
@@ -58,5 +61,12 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 	//
 	const FVector RightVector = GetActorRightVector();
 	AddMovementInput(RightVector, MovementVector.Y);
+}
+
+void APlayerCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2D LookVector = Value.Get<FVector2D>();
+    AddControllerYawInput(LookVector.X * LookSensitivityX);
+    AddControllerPitchInput(-LookVector.Y * LookSensitivityY);
 }
 
