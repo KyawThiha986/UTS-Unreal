@@ -4,7 +4,7 @@
 #include "PickupRotatorComponent.h"
 
 // Sets default values for this component's properties
-UPickupRotatorComponent::UPickupRotatorComponent(): RotationSpeed(0)
+UPickupRotatorComponent::UPickupRotatorComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -19,15 +19,16 @@ void UPickupRotatorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	FVector ActorLocation = GetOwner()->GetActorLocation();
+	UE_LOG(LogTemp, Warning, TEXT("Current Location: %s"), *ActorLocation.ToString());
 	
 }
 
 void UPickupRotatorComponent::TickRotateObject(const float& DeltaTime)
 {
 	FRotator CurrentActorRotation = GetOwner()->GetActorRotation();
-    CurrentActorRotation.Yaw += DeltaTime * RotationSpeed;
-    GetOwner()->SetActorRotation(CurrentActorRotation);
+	CurrentActorRotation.Yaw += DeltaTime * RotationSpeed;
+	GetOwner()->SetActorRotation(CurrentActorRotation);
 }
 
 
@@ -35,6 +36,7 @@ void UPickupRotatorComponent::TickRotateObject(const float& DeltaTime)
 void UPickupRotatorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 	TickRotateObject(DeltaTime);
 }
 

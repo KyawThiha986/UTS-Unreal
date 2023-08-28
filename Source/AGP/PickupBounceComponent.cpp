@@ -19,35 +19,25 @@ void UPickupBounceComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	StartPos = GetOwner()->GetActorLocation();
-	TargetPos = FVector(StartPos.X, StartPos.Y, StartPos.Z + 50);
-	CurrentAlpha = -0.1f;
-	GoBack = false;
+	StartingPosition = GetOwner()->GetActorLocation();
+	bIsMovingUp = true;
 }
 
-void UPickupBounceComponent::TickBounce(const float& DeltaTime)
+void UPickupBounceComponent::TickBounceObject(float DeltaTime)
 {
-	CurrentPos = GetOwner()->GetActorLocation();
-	CurrentPos = FMath::Lerp(StartPos, TargetPos, CurrentAlpha);
-
-	if (CurrentAlpha <= 0.0f)
+	FVector CurrentPosition = GetOwner()->GetActorLocation();
+	float NewZ = CurrentPosition.Z + (bIsMovingUp ? DeltaTime * BounceSpeed: -DeltaTime * BounceSpeed);
+	if (bIsMovingUp && NewZ > StartingPosition.Z + BounceExtent)
 	{
-		GoBack = false;
-	}
-	else if (CurrentAlpha >= 1.0f)
+		bIsMovingUp = false;
+		NewZ = StartingPosition.Z + BounceExtent;
+	} else if (!bIsMovingUp && NewZ < StartingPosition.Z - BounceExtent)
 	{
-		GoBack = true;
+		bIsMovingUp = true;
+		NewZ = StartingPosition.Z - BounceExtent;
 	}
-	
-	if (GoBack == false)
-	{
-		CurrentAlpha += DeltaTime / 2;
-	}
-	else
-	{
-		CurrentAlpha -= DeltaTime / 2;
-	}
-	GetOwner()->SetActorLocation(CurrentPos);
+	CurrentPosition.Z = NewZ;
+	GetOwner()->SetActorLocation(CurrentPosition);
 }
 
 
@@ -55,7 +45,7 @@ void UPickupBounceComponent::TickBounce(const float& DeltaTime)
 void UPickupBounceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	TickBounce(DeltaTime);
+
+	TickBounceObject(DeltaTime);
 }
 

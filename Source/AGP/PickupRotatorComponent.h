@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PickupRotatorComponent.generated.h"
 
@@ -15,16 +15,20 @@ class AGP_API UPickupRotatorComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UPickupRotatorComponent();
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
 	void TickRotateObject(const float& DeltaTime);
 
+public:	
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 private:
+
 	UPROPERTY(EditAnywhere)
 	float RotationSpeed;
+	
 };

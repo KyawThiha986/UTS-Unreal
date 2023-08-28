@@ -2,24 +2,24 @@
 
 
 #include "WeaponPickup.h"
+
 #include "AGP/PlayerCharacter.h"
 
 void AWeaponPickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                    UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Display, TEXT("Overlap event occurred on WeaponPickup"))
-	APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor);
 
-	if (Player != nullptr)
+	// Because getting a pointer to something we want to do actions on or get information from is common, and we always
+	// want to be sure the pointer is not a nullptr before using it, we can use this pattern where we both get the pointer
+	// and check that it is valid inside the if statement. In this case, the PlayerCharacter pointer variable will only
+	// exist inside the scope of the if statement.
+	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor))
 	{
-		if(Player -> HasWeapon() == false)
+		if (!PlayerCharacter->HasWeapon())
 		{
-			Player -> EquipWeapon(true);
-			Destroy();
-		}
-		else
-		{
-			return;
+			PlayerCharacter->EquipWeapon(true);
+			this->Destroy();
 		}
 	}
 }
