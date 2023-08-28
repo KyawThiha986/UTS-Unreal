@@ -24,6 +24,6 @@ protected:
 	void TickRotateObject(const float& DeltaTime);
 
 private:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere)
 	float RotationSpeed;
 };
