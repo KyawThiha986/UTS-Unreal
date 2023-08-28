@@ -51,6 +51,25 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+bool APlayerCharacter::HasWeapon()
+{
+	return(bHasWeaponEquipped);
+}
+
+void APlayerCharacter::EquipWeapon(bool Equipcheck)
+{
+	bHasWeaponEquipped = Equipcheck;
+	if (Equipcheck == true)
+	{
+		UE_LOG(LogTemp, Display, TEXT("Player has equipped a weapon"))
+	}
+
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Player has unequipped a weapon"))
+	}
+}
+
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	// Retrieves the 

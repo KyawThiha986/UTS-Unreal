@@ -8,11 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63fba42f-284a-49e9-8949-221e8774c30d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PickupRotatorComponent.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PickupRotatorComponent.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AGP/PickupRotatorComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/PickupRotatorComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/PlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/PlayerCharacter.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +135,7 @@
       <option name="presentableId" value="Default" />
       <updated>1693131257407</updated>
       <workItem from="1693131260720" duration="11324000" />
-      <workItem from="1693196462677" duration="3351000" />
+      <workItem from="1693196462677" duration="12516000" />
     </task>
     <servers />
   </component>
