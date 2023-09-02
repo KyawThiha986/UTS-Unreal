@@ -17,7 +17,6 @@ ANavigationNode::ANavigationNode()
 void ANavigationNode::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -53,7 +52,6 @@ void ANavigationNode::Tick(float DeltaTime)
 			4.0f
 			);
 		}
-		
 	}
 }
 
