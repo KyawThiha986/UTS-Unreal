@@ -6,6 +6,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PathfindingSubsystem.generated.h"
 
+class ANavigationNode;
 /**
  * 
  */
@@ -16,10 +17,10 @@ class AGP_API UPathfindingSubsystem : public UWorldSubsystem
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 
 public:
-	TArray<FVector*> GetRandomPath(const FVector& StartLocation);
+	TArray<FVector> GetRandomPath(const FVector& StartLocation);
 
 protected:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TArray<ANavigationNode*> Nodes;
 
 private:
