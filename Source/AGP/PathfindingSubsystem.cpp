@@ -27,6 +27,7 @@ void UPathfindingSubsystem::PopulateNodes()
 		if(Act)
 		{
 			Nodes.Push(Act);
+			UE_LOG(LogTemp, Warning, TEXT("%s"),*(*It)->GetActorNameOrLabel());
 			UE_LOG(LogTemp, Warning, TEXT("%s"),*(*It)->GetActorLocation().ToString());
 		}
 	}
