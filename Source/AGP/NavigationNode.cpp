@@ -45,7 +45,7 @@ void ANavigationNode::Tick(float DeltaTime)
 			GetWorld(),
 			FVector(GetActorLocation()),
 			FVector(ConnectedNode -> GetActorLocation()),
-			FColor::Blue,
+			FColor::Yellow,
 			false,
 			-1,
 			0,
