@@ -14,6 +14,9 @@ class AGP_API ANavigationNode : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ANavigationNode();
+	float FScore;
+	float GScore;
+	float HScore;
 
 protected:
 	// Called when the game starts or when spawned

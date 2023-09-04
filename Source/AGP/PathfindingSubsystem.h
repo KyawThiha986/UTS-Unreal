@@ -22,7 +22,9 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	TArray<ANavigationNode*> Nodes;
-
 private:
 	void PopulateNodes();
+	ANavigationNode* GetRandomNode();
+	ANavigationNode* FindNearestNode(const FVector& TargetLocation);
+	TArray<FVector> GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode);
 };
