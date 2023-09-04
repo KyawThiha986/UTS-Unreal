@@ -8,49 +8,44 @@ ANavigationNode::ANavigationNode()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
 	SetRootComponent(LocationComponent);
+	
 }
 
 // Called when the game starts or when spawned
 void ANavigationNode::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
 void ANavigationNode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	DrawDebugSphere(
-	GetWorld(),
-	FVector(GetActorLocation()),
-	60.0f,
-	8,
-	FColor::Blue,
-	false,
-	-1,
-	0,
-	4.0f
-	);
 
-	
-	for(const ANavigationNode* ConnectedNode: ConnectedNodes)
+	FColor SphereColor = FColor::Blue;
+	if (ConnectedNodes.Contains(this))
 	{
-		if (ConnectedNode != nullptr)
+		SphereColor = FColor::Red;
+	}
+	
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 50.0f, 4, SphereColor, false, -1, 0, 5.0f);
+	
+	for (const ANavigationNode* ConnectedNode : ConnectedNodes)
+	{
+		if (ConnectedNode)
 		{
-			DrawDebugLine(
-			GetWorld(),
-			FVector(GetActorLocation()),
-			FVector(ConnectedNode -> GetActorLocation()),
-			FColor::Yellow,
-			false,
-			-1,
-			0,
-			4.0f
-			);
+			FColor LineColor = FColor::Red;
+			if (ConnectedNode->ConnectedNodes.Contains(this))
+			{
+				LineColor = FColor::Green;
+			}
+			DrawDebugLine(GetWorld(), GetActorLocation(), ConnectedNode->GetActorLocation(),
+				LineColor, false, -1, 0, 5.0f);
 		}
 	}
 }

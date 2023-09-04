@@ -5,7 +5,6 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -21,17 +20,16 @@ bool APlayerCharacter::HasWeapon()
 
 void APlayerCharacter::EquipWeapon(bool bEquipWeapon)
 {
-	EquipWeaponGraphical(bEquipWeapon);
 	bHasWeaponEquipped = bEquipWeapon;
+	EquipWeaponGraphical(bEquipWeapon);
 	if (bEquipWeapon)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Player has equipped weapon"))
+		UE_LOG(LogTemp, Display, TEXT("Player has equipped weapon."))
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Player has unequipped weapon"))
+		UE_LOG(LogTemp, Display, TEXT("Player has unequipped weapon."))
 	}
-	
 }
 
 // Called when the game starts or when spawned

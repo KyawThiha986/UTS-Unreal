@@ -6,10 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "PickupBase.generated.h"
 
-// This is a forward declaration. It tells this classes header file that a class called UBoxComponent exists without
-// needing to use a #include directive.
-// We could #include "Components/BoxComponent.h" but it is preferred to forward declare then #include in the .cpp file.
-// For this subject either is acceptable but using #include less in headers improves compile time.
 class UBoxComponent;
 
 UCLASS()
@@ -25,14 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	virtual void OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& HitInfo);
+
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* PickupMesh;
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* PickupCollider;
-
-    UFUNCTION()
-	virtual void OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* PickupRoot;
 
 public:	
 	// Called every frame

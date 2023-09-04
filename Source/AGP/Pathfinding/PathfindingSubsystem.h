@@ -14,17 +14,22 @@ UCLASS()
 class AGP_API UPathfindingSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
-	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 
 public:
+
+	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 	TArray<FVector> GetRandomPath(const FVector& StartLocation);
 
 protected:
-	UPROPERTY(EditAnywhere)
+
 	TArray<ANavigationNode*> Nodes;
+
 private:
+
 	void PopulateNodes();
 	ANavigationNode* GetRandomNode();
 	ANavigationNode* FindNearestNode(const FVector& TargetLocation);
 	TArray<FVector> GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode);
+	static TArray<FVector> ReconstructPath(const TMap<ANavigationNode*, ANavigationNode*>& CameFromMap, ANavigationNode* EndNode);
+	
 };
