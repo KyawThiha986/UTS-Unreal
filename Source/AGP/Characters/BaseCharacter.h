@@ -3,36 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseCharacter.h"
 #include "GameFramework/Character.h"
-#include "EnemyCharacter.generated.h"
-
-class UPathfindingSubsystem;
+#include "BaseCharacter.generated.h"
 
 UCLASS()
-class AGP_API AEnemyCharacter : public ABaseCharacter
+class AGP_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AEnemyCharacter();
+	ABaseCharacter();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void MoveAlongPath();
+	bool bHasWeaponEquipped = false;
 
-	UPROPERTY()
-	UPathfindingSubsystem* PathfindingSubsystem;
+	float TimeSinceLastShot = 0.0f;
+	float MinTimeBetweenShots = 0.2f;
 	UPROPERTY(VisibleAnywhere)
-	TArray<FVector> CurrentPath;
-	
-	UPROPERTY(EditAnywhere)
-	float PathfindingError = 150.0f; // 150 cm from target by default.
+	USceneComponent* BulletStartPosition;
 
-	
+	bool Fire(const FVector& FireAtLocation);
 
 public:	
 	// Called every frame
@@ -40,5 +34,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+	bool HasWeapon();
+
+	void EquipWeapon(bool bEquipWeapon);
+	UFUNCTION(BlueprintImplementableEvent)
+	void EquipWeaponGraphical(bool bEquipWeapon);
 
 };

@@ -13,24 +13,7 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-bool APlayerCharacter::HasWeapon()
-{
-	return bHasWeaponEquipped;
-}
 
-void APlayerCharacter::EquipWeapon(bool bEquipWeapon)
-{
-	bHasWeaponEquipped = bEquipWeapon;
-	EquipWeaponGraphical(bEquipWeapon);
-	if (bEquipWeapon)
-	{
-		UE_LOG(LogTemp, Display, TEXT("Player has equipped weapon."))
-	}
-	else
-	{
-		UE_LOG(LogTemp, Display, TEXT("Player has unequipped weapon."))
-	}
-}
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()

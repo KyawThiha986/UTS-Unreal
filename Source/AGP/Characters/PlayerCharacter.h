@@ -3,14 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseCharacter.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
+
 
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 UCLASS()
-class AGP_API APlayerCharacter : public ACharacter
+class AGP_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -18,12 +20,7 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
-	UFUNCTION(BlueprintCallable)
-	bool HasWeapon();
 
-	void EquipWeapon(bool bEquipWeapon);
-	UFUNCTION(BlueprintImplementableEvent)
-	void EquipWeaponGraphical(bool bEquipWeapon);
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,8 +37,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LookSensitivity = 0.5f;
-
-	bool bHasWeaponEquipped = false;
 
 public:	
 	// Called every frame
