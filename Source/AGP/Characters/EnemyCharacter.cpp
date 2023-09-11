@@ -53,8 +53,12 @@ void AEnemyCharacter::TickPatrol()
 {
 	if (CurrentPath.IsEmpty())
 	{
-		MoveAlongPath();
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+		}
 	}
+	MoveAlongPath();
 }
 
 void AEnemyCharacter::TickEngage()
@@ -64,19 +68,22 @@ void AEnemyCharacter::TickEngage()
 		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
 		{
 			CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), (*It)->GetActorLocation());
-			MoveAlongPath();
 			Fire((*It) -> GetActorLocation());
 		}
 	}
+	MoveAlongPath();
 }
 
 void AEnemyCharacter::TickEvade()
 {
-	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	if (CurrentPath.IsEmpty())
 	{
-		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), (*It)->GetActorLocation());
-		MoveAlongPath();
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+     	{
+     		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), (*It)->GetActorLocation());
+     	}
 	}
+	MoveAlongPath();
 }
 
 
@@ -85,7 +92,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*
+	
 	if (CurrentState == EEnemyState::Patrol) {
 		TickPatrol();
     }
@@ -97,8 +104,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	{
 		TickEvade();
 	}
-	*/
 	
+
+	/*
 	switch (CurrentState)
 	{
 	case EEnemyState::Patrol:
@@ -114,6 +122,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 	default: break; 
 	}
+	*/
 }
 
 // Called to bind functionality to input

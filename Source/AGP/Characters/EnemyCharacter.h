@@ -13,9 +13,9 @@ UENUM(BlueprintType) // Allows us to use this enum in blueprints.
 
 enum class EEnemyState : uint8 {
 
-	Patrol, // This essentially gets set to 0
-	Engage, // set to 1
-	Evade  // set to 2
+	Patrol,
+	Engage,
+	Evade
 
 };
 
@@ -45,7 +45,7 @@ protected:
 	float PathfindingError = 150.0f; // 150 cm from target by default.
 
 	UPROPERTY(EditAnywhere)
-	EEnemyState CurrentState;
+	EEnemyState CurrentState = EEnemyState::Patrol;
 
 	void TickPatrol();
 	void TickEngage();

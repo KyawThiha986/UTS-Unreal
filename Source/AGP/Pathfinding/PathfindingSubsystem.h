@@ -31,7 +31,7 @@ private:
 	void PopulateNodes();
 	ANavigationNode* GetRandomNode();
 	ANavigationNode* FindNearestNode(const FVector& TargetLocation);
-	ANavigationNode* FindFarthestNode(const FVector& TargetLocation);
+	ANavigationNode* FindFarthestNode(const FVector& LocationToRunAwayFrom);
 	TArray<FVector> GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode);
 	static TArray<FVector> ReconstructPath(const TMap<ANavigationNode*, ANavigationNode*>& CameFromMap, ANavigationNode* EndNode);
 	
