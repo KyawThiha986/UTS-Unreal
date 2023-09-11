@@ -3,6 +3,8 @@
 
 #include "EnemyCharacter.h"
 
+#include "EngineUtils.h"
+#include "PlayerCharacter.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
 
 // Sets default values
@@ -47,15 +49,70 @@ void AEnemyCharacter::MoveAlongPath()
 	}
 }
 
+void AEnemyCharacter::TickPatrol()
+{
+	if (CurrentPath.IsEmpty())
+	{
+		MoveAlongPath();
+	}
+}
+
+void AEnemyCharacter::TickEngage()
+{
+	if (CurrentPath.IsEmpty())
+	{
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), (*It)->GetActorLocation());
+			MoveAlongPath();
+			Fire((*It) -> GetActorLocation());
+		}
+	}
+}
+
+void AEnemyCharacter::TickEvade()
+{
+	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	{
+		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), (*It)->GetActorLocation());
+		MoveAlongPath();
+	}
+}
+
+
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MoveAlongPath();
-	if (CurrentPath.IsEmpty() && PathfindingSubsystem)
+	/*
+	if (CurrentState == EEnemyState::Patrol) {
+		TickPatrol();
+    }
+	else if (CurrentState == EEnemyState::Engage)
 	{
-		CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+		TickEngage();
+	}
+	else if (CurrentState == EEnemyState::Evade)
+	{
+		TickEvade();
+	}
+	*/
+	
+	switch (CurrentState)
+	{
+	case EEnemyState::Patrol:
+		TickPatrol();
+		break; 
+
+	case EEnemyState::Engage:
+		TickEngage();
+		break;
+	case EEnemyState::Evade:
+		TickEvade();
+		break;
+
+	default: break; 
 	}
 }
 

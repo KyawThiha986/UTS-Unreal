@@ -16,6 +16,16 @@ TArray<FVector> UPathfindingSubsystem::GetRandomPath(const FVector& StartLocatio
 	return GetPath(FindNearestNode(StartLocation), GetRandomNode());
 }
 
+TArray<FVector> UPathfindingSubsystem::GetPath(const FVector& StartLocation, const FVector& TargetLocation)
+{
+	return GetPath(FindNearestNode(StartLocation), FindNearestNode(TargetLocation));
+}
+
+TArray<FVector> UPathfindingSubsystem::GetPathAway(const FVector& StartLocation, const FVector& LocationToRunAwayFrom)
+{
+	return GetPath(FindFarthestNode(StartLocation), FindNearestNode(LocationToRunAwayFrom));
+}
+
 void UPathfindingSubsystem::PopulateNodes()
 {
 	Nodes.Empty();
@@ -63,6 +73,32 @@ ANavigationNode* UPathfindingSubsystem::FindNearestNode(const FVector& TargetLoc
 	}
 
 	return ClosestNode;
+}
+
+ANavigationNode* UPathfindingSubsystem::FindFarthestNode(const FVector& TargetLocation)
+{
+	// Failure condition.
+	if (Nodes.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("The nodes array is empty."))
+		return nullptr;
+	}
+
+	// Using the minimum programming pattern to find the closest node.
+	// What is the Big O complexity of this? Can you do it more efficiently?
+	ANavigationNode* FarthestNode = nullptr;
+	float MaxDistance = 0;
+	for (ANavigationNode* Node : Nodes)
+	{
+		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
+		if (MaxDistance < Distance)
+		{
+			MaxDistance = Distance;
+			FarthestNode = Node;
+		}
+	}
+
+	return FarthestNode;
 }
 
 TArray<FVector> UPathfindingSubsystem::GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode)
