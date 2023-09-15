@@ -27,7 +27,6 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
-	
 }
 
 // Called every frame
@@ -46,8 +45,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
-		Input->BindAction(FireAction, ETriggerEvent::Triggered, this, &APlayerCharacter::FireWeapon);
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		Input->BindAction(FireAction, ETriggerEvent::Triggered, this, &APlayerCharacter::FireWeapon);
 	}
 }
 
@@ -73,8 +72,9 @@ void APlayerCharacter::FireWeapon(const FInputActionValue& Value)
 	FRotator CameraRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(CameraPosition, CameraRotation);
 	const FVector CameraForward = UKismetMathLibrary::GetForwardVector(CameraRotation);
-	
-		Fire(GetActorLocation()+ FVector(0,0,50) + 10000.0f * CameraForward);
-	
+	if (BulletStartPosition)
+	{
+		Fire(BulletStartPosition->GetComponentLocation() + 10000.0f * CameraForward);
+	}
 }
 

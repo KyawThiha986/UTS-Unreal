@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseCharacter.h"
 #include "GameFramework/Character.h"
+#include "BaseCharacter.h"
+#include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
-
 
 class UInputMappingContext;
 class UInputAction;
@@ -19,8 +19,6 @@ class AGP_API APlayerCharacter : public ABaseCharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
-
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,4 +50,5 @@ private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void FireWeapon(const FInputActionValue& Value);
+
 };

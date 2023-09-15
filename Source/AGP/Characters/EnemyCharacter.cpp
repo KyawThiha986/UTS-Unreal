@@ -2,16 +2,19 @@
 
 
 #include "EnemyCharacter.h"
-
 #include "EngineUtils.h"
+#include "HealthComponent.h"
 #include "PlayerCharacter.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
+#include "Perception/PawnSensingComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("Pawn Sensing Component");
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +29,10 @@ void AEnemyCharacter::BeginPlay()
 	} else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
+	}
+	if (PawnSensingComponent)
+	{
+		PawnSensingComponent->OnSeePawn.AddDynamic(this, &AEnemyCharacter::OnSensedPawn);
 	}
 }
 
@@ -53,37 +60,56 @@ void AEnemyCharacter::TickPatrol()
 {
 	if (CurrentPath.IsEmpty())
 	{
-		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
-		{
-			CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
-		}
+		CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
 	}
 	MoveAlongPath();
 }
 
 void AEnemyCharacter::TickEngage()
 {
+	
+	if (!SensedCharacter) return;
+	
 	if (CurrentPath.IsEmpty())
 	{
-		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
-		{
-			CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), (*It)->GetActorLocation());
-			Fire((*It) -> GetActorLocation());
-		}
+		CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), SensedCharacter->GetActorLocation());
 	}
 	MoveAlongPath();
+	Fire(SensedCharacter->GetActorLocation());
 }
 
 void AEnemyCharacter::TickEvade()
 {
+	// Find the player and return if it can't find it.
+	if (!SensedCharacter) return;
+
 	if (CurrentPath.IsEmpty())
 	{
-		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
-     	{
-     		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), (*It)->GetActorLocation());
-     	}
+		CurrentPath = PathfindingSubsystem->GetPathAway(GetActorLocation(), SensedCharacter->GetActorLocation());
 	}
 	MoveAlongPath();
+}
+
+void AEnemyCharacter::OnSensedPawn(APawn* SensedActor)
+{
+	if (APlayerCharacter* Player = Cast<APlayerCharacter>(SensedActor))
+	{
+		SensedCharacter = Player;
+		UE_LOG(LogTemp, Display, TEXT("Sensed Player"))
+	}
+}
+
+void AEnemyCharacter::UpdateSight()
+{
+	if (!SensedCharacter) return;
+	if (PawnSensingComponent)
+	{
+		if (!PawnSensingComponent->HasLineOfSightTo(SensedCharacter))
+		{
+			SensedCharacter = nullptr;
+			UE_LOG(LogTemp, Display, TEXT("Lost Player"))
+		}
+	}
 }
 
 
@@ -92,37 +118,47 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateSight();
 	
-	if (CurrentState == EEnemyState::Patrol) {
-		TickPatrol();
-    }
-	else if (CurrentState == EEnemyState::Engage)
-	{
-		TickEngage();
-	}
-	else if (CurrentState == EEnemyState::Evade)
-	{
-		TickEvade();
-	}
-	
-
-	/*
-	switch (CurrentState)
+	switch(CurrentState)
 	{
 	case EEnemyState::Patrol:
 		TickPatrol();
-		break; 
-
+		if (SensedCharacter)
+		{
+			if (HealthComponent->GetCurrentHealthPercentage() >= 0.4f)
+			{
+				CurrentState = EEnemyState::Engage;
+			} else
+			{
+				CurrentState = EEnemyState::Evade;
+			}
+			CurrentPath.Empty();
+		}
+		break;
 	case EEnemyState::Engage:
 		TickEngage();
+		if (HealthComponent->GetCurrentHealthPercentage() < 0.4f)
+		{
+			CurrentPath.Empty();
+			CurrentState = EEnemyState::Evade;
+		} else if (!SensedCharacter)
+		{
+			CurrentState = EEnemyState::Patrol;
+		}
 		break;
 	case EEnemyState::Evade:
 		TickEvade();
+		if (HealthComponent->GetCurrentHealthPercentage() >= 0.4f)
+		{
+			CurrentPath.Empty();
+			CurrentState = EEnemyState::Engage;
+		} else if (!SensedCharacter)
+		{
+			CurrentState = EEnemyState::Patrol;
+		}
 		break;
-
-	default: break; 
 	}
-	*/
 }
 
 // Called to bind functionality to input
@@ -130,5 +166,20 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+APlayerCharacter* AEnemyCharacter::FindPlayer() const
+{
+	APlayerCharacter* Player = nullptr;
+	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	{
+		Player = *It;
+		break;
+	}
+	if (!Player)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to find the Player Character in the world."))
+	}
+	return Player;
 }
 

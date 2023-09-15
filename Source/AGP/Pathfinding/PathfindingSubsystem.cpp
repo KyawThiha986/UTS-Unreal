@@ -21,9 +21,9 @@ TArray<FVector> UPathfindingSubsystem::GetPath(const FVector& StartLocation, con
 	return GetPath(FindNearestNode(StartLocation), FindNearestNode(TargetLocation));
 }
 
-TArray<FVector> UPathfindingSubsystem::GetPathAway(const FVector& StartLocation, const FVector& LocationToRunAwayFrom)
+TArray<FVector> UPathfindingSubsystem::GetPathAway(const FVector& StartLocation, const FVector& TargetLocation)
 {
-	return GetPath(FindNearestNode(StartLocation), FindFarthestNode(LocationToRunAwayFrom));
+	return GetPath(FindNearestNode(StartLocation), FindFurthestNode(TargetLocation));
 }
 
 void UPathfindingSubsystem::PopulateNodes()
@@ -75,7 +75,7 @@ ANavigationNode* UPathfindingSubsystem::FindNearestNode(const FVector& TargetLoc
 	return ClosestNode;
 }
 
-ANavigationNode* UPathfindingSubsystem::FindFarthestNode(const FVector& LocationToRunAwayFrom)
+ANavigationNode* UPathfindingSubsystem::FindFurthestNode(const FVector& TargetLocation)
 {
 	// Failure condition.
 	if (Nodes.Num() == 0)
@@ -86,19 +86,19 @@ ANavigationNode* UPathfindingSubsystem::FindFarthestNode(const FVector& Location
 
 	// Using the minimum programming pattern to find the closest node.
 	// What is the Big O complexity of this? Can you do it more efficiently?
-	ANavigationNode* FarthestNode = nullptr;
-	float MaxDistance = 0;
+	ANavigationNode* FurthestNode = nullptr;
+	float MaxDistance = -1.0f;
 	for (ANavigationNode* Node : Nodes)
 	{
-		const float Distance = FVector::Distance(LocationToRunAwayFrom, Node->GetActorLocation());
-		if (MaxDistance < Distance)
+		const float Distance = FVector::Distance(TargetLocation, Node->GetActorLocation());
+		if (Distance > MaxDistance)
 		{
 			MaxDistance = Distance;
-			FarthestNode = Node;
+			FurthestNode = Node;
 		}
 	}
 
-	return FarthestNode;
+	return FurthestNode;
 }
 
 TArray<FVector> UPathfindingSubsystem::GetPath(ANavigationNode* StartNode, ANavigationNode* EndNode)
