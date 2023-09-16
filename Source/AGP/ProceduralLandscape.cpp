@@ -6,6 +6,8 @@
 #include <SceneExport.h>
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "KismetProceduralMeshLibrary.h"
+#include "MeshBuild.h"
 
 // Sets default values
 AProceduralLandscape::AProceduralLandscape()
@@ -56,8 +58,10 @@ void AProceduralLandscape::GenerateLandscape()
 
 	PerlinOffset = FMath::FRandRange(-1000000.0f, 1000000.0f);
 	
-	ProceduralMesh->CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), UVCoords,
+	ProceduralMesh -> CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), UVCoords,
 TArray<FColor>(), TArray<FProcMeshTangent>(), true);
+
+	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVCoords, Normals, Tangents);
 }
 
 // Called when the game starts or when spawned
