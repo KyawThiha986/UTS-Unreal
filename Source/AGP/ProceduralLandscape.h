@@ -48,6 +48,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float VertexSpacing = 1000.0f;
 
+	UPROPERTY(EditAnywhere)
+	float PerlinScale = 3000.0f;
+	UPROPERTY(EditAnywhere)
+	float PerlinRoughness = 0.00015f;
+
+	UPROPERTY(VisibleAnywhere)
+	float PerlinOffset = FMath::FRandRange(-1000000.0f, 1000000.0f);
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
