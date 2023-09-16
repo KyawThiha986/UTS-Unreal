@@ -3,6 +3,8 @@
 
 #include "ProceduralLandscape.h"
 
+#include <SceneExport.h>
+
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -12,10 +14,9 @@ AProceduralLandscape::AProceduralLandscape()
 	PrimaryActorTick.bCanEverTick = true;
 	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Procedural Mesh"));
 	SetRootComponent(ProceduralMesh);
-	
-	
 }
 
+//Clears previous landscape assets when a new landscape is generated
 void AProceduralLandscape::ClearLandscape()
 {
 	Vertices.Empty();
@@ -26,12 +27,13 @@ void AProceduralLandscape::ClearLandscape()
 
 void AProceduralLandscape::GenerateLandscape()
 {
-	//Generates and array of Vertices with some randomness in Z axis
+	//Generates and array of Vertices
 	for (int32 Y = 0; Y < Height; Y++) {
 		for (int32 X = 0; X < Width; X++) {
-			FVector Position = FVector(X*VertexSpacing, Y*VertexSpacing, FMath::RandRange(-200.0f, 200.0f));
+			float Z = FMath::PerlinNoise2D(FVector2D(X * VertexSpacing * PerlinRoughness + PerlinOffset, Y * VertexSpacing * PerlinRoughness + PerlinOffset)) * PerlinScale;
+			FVector Position = FVector(X * VertexSpacing, Y * VertexSpacing, Z);
 			Vertices.Add(Position);
-			DrawDebugSphere(GetWorld(), Position, 50.0f, 8, FColor::Blue, true, -1.0f, 0, 5.0f);
+			//DrawDebugSphere(GetWorld(), Position, 50.0f, 8, FColor::Blue, true, -1.0f, 0, 5.0f);
 			UVCoords.Add(FVector2D(X, Y));
 		}
 	}
@@ -51,6 +53,8 @@ void AProceduralLandscape::GenerateLandscape()
 			Triangles.Add(UpLeft);
 		}
 	}
+
+	PerlinOffset = FMath::FRandRange(-1000000.0f, 1000000.0f);
 	
 	ProceduralMesh->CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), UVCoords,
 TArray<FColor>(), TArray<FProcMeshTangent>(), true);
@@ -66,6 +70,7 @@ void AProceduralLandscape::BeginPlay()
 	//GenerateLandscape();
 }
 
+/*
 void AProceduralLandscape::CreateSimplePlane()
 {
 	Vertices.Add(FVector(0.0f, 0.0f, FMath::RandRange(-500.0f, 500.0f)));
@@ -96,6 +101,7 @@ void AProceduralLandscape::CreateSimplePlane()
 		TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 	}
 }
+*/
 
 // Called every frame
 void AProceduralLandscape::Tick(float DeltaTime)
