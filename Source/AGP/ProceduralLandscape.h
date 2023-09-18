@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralMeshComponent.h"
+#include "Pathfinding/NavigationNode.h"
 #include "ProceduralLandscape.generated.h"
 
 
@@ -37,6 +38,9 @@ protected:
 	UPROPERTY()
 	TArray<FVector2D> UVCoords;
 
+	UPROPERTY()
+	TArray<ANavigationNode*> Nodes;
+
 	UPROPERTY(EditAnywhere)
 	bool bShouldRegenerate = false;
 
@@ -60,4 +64,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	bool ShouldTickIfViewportsOnly() const override;
+	
 };

@@ -44,8 +44,8 @@ void ANavigationNode::Tick(float DeltaTime)
 			{
 				LineColor = FColor::Green;
 			}
-			DrawDebugLine(GetWorld(), GetActorLocation(), ConnectedNode->GetActorLocation(),
-				LineColor, false, -1, 0, 5.0f);
+			DrawDebugLine(GetWorld(), GetActorLocation(), ConnectedNode->GetActorLocation(),LineColor, false, -1, 0, 5.0f);
+				
 		}
 	}
 }

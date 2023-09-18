@@ -5,9 +5,12 @@
 
 #include <SceneExport.h>
 
+#include "EngineUtils.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "KismetProceduralMeshLibrary.h"
+#include "Pathfinding/NavigationNode.h"
 #include "MeshBuild.h"
+#include "StaticMeshOperations.h"
 
 // Sets default values
 AProceduralLandscape::AProceduralLandscape()
@@ -24,12 +27,17 @@ void AProceduralLandscape::ClearLandscape()
 	Vertices.Empty();
 	Triangles.Empty();
 	UVCoords.Empty();
+	Nodes.Empty();
+	for (TActorIterator<ANavigationNode> It(GetWorld()); It; ++It)
+	{
+		(*It) -> Destroy();
+	}
 	UKismetSystemLibrary::FlushPersistentDebugLines(GetWorld());
 }
 
 void AProceduralLandscape::GenerateLandscape()
 {
-	//Generates and array of Vertices
+	//Generates an array of Vertices
 	for (int32 Y = 0; Y < Height; Y++) {
 		for (int32 X = 0; X < Width; X++) {
 			float Z = FMath::PerlinNoise2D(FVector2D(X * VertexSpacing * PerlinRoughness + PerlinOffset, Y * VertexSpacing * PerlinRoughness + PerlinOffset)) * PerlinScale;
@@ -37,6 +45,12 @@ void AProceduralLandscape::GenerateLandscape()
 			Vertices.Add(Position);
 			//DrawDebugSphere(GetWorld(), Position, 50.0f, 8, FColor::Blue, true, -1.0f, 0, 5.0f);
 			UVCoords.Add(FVector2D(X, Y));
+
+			//Spawn Nodes for each vertex
+			ANavigationNode* SpawnNode;
+			SpawnNode = GetWorld()->SpawnActor<ANavigationNode>();
+			SpawnNode -> SetActorLocation(Position);
+			Nodes.Add(SpawnNode);
 		}
 	}
 
@@ -45,23 +59,53 @@ void AProceduralLandscape::GenerateLandscape()
 		for (int32 X = 0; X < Width - 1; X++) {
 			const int32 Origin = Y * Width + X;
 			const int32 Up = ( Y + 1 ) * Width + X;
+			const int32 Down = ( Y - 1 ) * Width + X;
 			const int32 Left = Y * Width + X + 1;
+			const int32 Right = Y * Width + X - 1;
 			const int32 UpLeft = ( Y + 1 ) * Width + X + 1;
+			const int32 DownLeft = ( Y - 1 ) * Width + X + 1;
+			const int32 UpRight = ( Y + 1 ) * Width + X - 1;
+			const int32 DownRight = ( Y - 1 ) * Width + X - 1;
 			Triangles.Add(Origin);
 			Triangles.Add(Up);
 			Triangles.Add(Left);
 			Triangles.Add(Left);
 			Triangles.Add(Up);
 			Triangles.Add(UpLeft);
+			if (Y != Height-1) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[Up]);
+			}
+			if (Y != 0) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[Down]);
+			}
+			if (X != Width-1) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[Left]);
+			}
+			if (X != 0) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[Right]);
+			}
+			if (Y != Height-1 && X != Width-1) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[UpLeft]);
+			}
+			if (Y != Height-1 && X != 0) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[UpRight]);
+			}
+			if (Y != 0 && X != Width-1) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[DownLeft]);
+			}
+			if (Y != 0 && X != 0) {
+				Nodes[Origin]->ConnectedNodes.Add(Nodes[DownRight]);
+			}
 		}
 	}
 
 	PerlinOffset = FMath::FRandRange(-1000000.0f, 1000000.0f);
-	
-	ProceduralMesh -> CreateMeshSection(0, Vertices, Triangles, TArray<FVector>(), UVCoords,
-TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 
+	TArray<FVector> Normals;
+	TArray<FProcMeshTangent> Tangents;
 	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVCoords, Normals, Tangents);
+	
+	ProceduralMesh -> CreateMeshSection(0, Vertices, Triangles, Normals, UVCoords,TArray<FColor>(), Tangents, true);
 }
 
 // Called when the game starts or when spawned
