@@ -25,68 +25,41 @@ void ABaseCharacter::BeginPlay()
 
 bool ABaseCharacter::Fire(const FVector& FireAtLocation)
 {
-	// Determine if the character is able to fire.
-	if (TimeSinceLastShot < MinTimeBetweenShots)
+	if (HasWeapon())
 	{
-		return false;
+		return WeaponComponent->Fire(BulletStartPosition->GetComponentLocation(),FireAtLocation);
 	}
-
-	FHitResult HitResult;
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, BulletStartPosition->GetComponentLocation(), FireAtLocation, ECC_Pawn, QueryParams))
-	{
-		if (ABaseCharacter* HitCharacter = Cast<ABaseCharacter>(HitResult.GetActor()))
-		{
-			if (UHealthComponent* HitCharacterHealth = HitCharacter->GetComponentByClass<UHealthComponent>())
-			{
-				HitCharacterHealth->ApplyDamage(WeaponDamage);
-			}
-			DrawDebugLine(GetWorld(), BulletStartPosition->GetComponentLocation(), HitResult.ImpactPoint, FColor::Green, false, 1.0f);
-		}
-		else
-		{
-			DrawDebugLine(GetWorld(), BulletStartPosition->GetComponentLocation(), HitResult.ImpactPoint, FColor::Orange, false, 1.0f);
-		}
-		
-	}
-	else
-	{
-		DrawDebugLine(GetWorld(), BulletStartPosition->GetComponentLocation(), FireAtLocation, FColor::Red, false, 1.0f);
-	}
-
-	TimeSinceLastShot = 0.0f;
-	return true;
+	return false;
 }
 
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bHasWeaponEquipped)
-	{
-		TimeSinceLastShot += DeltaTime;
-	}
 }
 
 bool ABaseCharacter::HasWeapon()
 {
-	return bHasWeaponEquipped;
+	if (WeaponComponent)
+	{
+		return true;
+	}
+	return false;
 }
 
 void ABaseCharacter::EquipWeapon(bool bEquipWeapon)
 {
-	bHasWeaponEquipped = bEquipWeapon;
+	if (bEquipWeapon && !HasWeapon())
+	{
+		WeaponComponent = NewObject<UWeaponComponent>(this);
+		WeaponComponent->RegisterComponent();
+	}
+	else if (!bEquipWeapon && HasWeapon())
+	{
+		WeaponComponent->UnregisterComponent();
+		WeaponComponent = nullptr;
+	}
 	EquipWeaponGraphical(bEquipWeapon);
-	if (bEquipWeapon)
-	{
-		UE_LOG(LogTemp, Display, TEXT("Player has equipped weapon."))
-	}
-	else
-	{
-		UE_LOG(LogTemp, Display, TEXT("Player has unequipped weapon."))
-	}
 }
 
 // Called to bind functionality to input

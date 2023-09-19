@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "../Pickups/WeaponComponent.h"
 #include "BaseCharacter.generated.h"
 
 class UHealthComponent;
@@ -28,21 +29,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	bool bHasWeaponEquipped = false;
-
-	/**
-	 * Will be updated each frame and be used to determine if a shot can be taken.
-	 */
-	float TimeSinceLastShot = 0.0f;
-	/**
-	 * Is the minimum time that needs to have occured between shots.
-	 */
-	float MinTimeBetweenShots = 0.2f;
-	/**
-	 * The damage that will be applied to characters that are hit with this weapon.
-	 */
-	float WeaponDamage = 10.0f;
-
 	/**
 	 * A scene component to store the position that hit scan shots start from. For the enemy character this could
 	 * be placed close to the guns position for example and for the player character it can be placed close to the
@@ -61,6 +47,9 @@ protected:
 	 * @return true if a shot was taken and false otherwise.
 	 */
 	bool Fire(const FVector& FireAtLocation);
+
+	UPROPERTY();
+	UWeaponComponent* WeaponComponent = nullptr;
 
 public:	
 	// Called every frame
