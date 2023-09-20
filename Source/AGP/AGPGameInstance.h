@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Pickups/WeaponPickup.h"
 #include "AGPGameInstance.generated.h"
 
 /**
@@ -13,5 +14,11 @@ UCLASS()
 class AGP_API UAGPGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
+	public:
+	UClass* GetWeaponPickupClass() const;
 	
+	protected:
+	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
+	TSubclassOf<AWeaponPickup> WeaponPickupClass;
 };

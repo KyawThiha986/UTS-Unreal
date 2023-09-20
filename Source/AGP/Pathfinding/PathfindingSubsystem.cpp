@@ -9,6 +9,7 @@
 void UPathfindingSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	PopulateNodes();
+	GetWaypointPositions();
 }
 
 TArray<FVector> UPathfindingSubsystem::GetRandomPath(const FVector& StartLocation)
@@ -24,6 +25,16 @@ TArray<FVector> UPathfindingSubsystem::GetPath(const FVector& StartLocation, con
 TArray<FVector> UPathfindingSubsystem::GetPathAway(const FVector& StartLocation, const FVector& TargetLocation)
 {
 	return GetPath(FindNearestNode(StartLocation), FindFurthestNode(TargetLocation));
+}
+
+TArray<FVector> UPathfindingSubsystem::GetWaypointPositions()
+{
+	TArray<FVector> NodeLocations;
+	for (ANavigationNode* Node : Nodes)
+	{
+		NodeLocations.Add(Node->GetActorLocation());
+	}
+	return NodeLocations;
 }
 
 void UPathfindingSubsystem::PopulateNodes()

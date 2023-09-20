@@ -39,6 +39,8 @@ public:
 	 */
 	TArray<FVector> GetPathAway(const FVector& StartLocation, const FVector& TargetLocation);
 
+	TArray<FVector> GetWaypointPositions();
+	
 protected:
 
 	TArray<ANavigationNode*> Nodes;

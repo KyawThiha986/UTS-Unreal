@@ -2,4 +2,9 @@
 
 
 #include "AGPGameInstance.h"
+#include "Pickups/WeaponPickup.h"
 
+UClass* UAGPGameInstance::GetWeaponPickupClass() const
+{
+	return WeaponPickupClass.Get();
+}

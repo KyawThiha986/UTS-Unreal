@@ -7,16 +7,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4fcc8e67-4908-4c66-9d9c-ea347cfcc783" name="Changes" comment="">
+    <list default="true" id="386e5f5d-e15c-429a-9e4d-bbd29db8fb32" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/AnimBP_FPArms.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/AnimBP_FPArms.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/AnimBP_Mannequin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/AnimBP_Mannequin.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/2/KR/1FSZ8INGRL10KXP07TXYAD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/2/KR/1FSZ8INGRL10KXP07TXYAD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/3/SY/SCF51RMUW4V13MQF43MKXX.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/3/SY/SCF51RMUW4V13MQF43MKXX.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/7/M3/YW364Y1SX6883USZ5JEPIL.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/7/M3/YW364Y1SX6883USZ5JEPIL.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/D/14/ZE7PEV345WPZS1LY5HRVNH.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Levels/TestingMap/D/14/ZE7PEV345WPZS1LY5HRVNH.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/ShooterMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ShooterMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/AGPGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/AGPGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/AGPGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/AGPGameInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pathfinding/PathfindingSubsystem.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,26 +24,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -53,7 +31,7 @@
   "customColor": "",
   "associatedIndex": 8
 }]]></component>
-  <component name="ProjectId" id="2VaodVoeIVWO9DK4l8M55tUrBrb" />
+  <component name="ProjectId" id="2VbnA8xxcL4Zs8n7mwr8faGudlU" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -63,7 +41,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Week5",
+    "git-widget-placeholder": "Week7",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -144,12 +122,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4fcc8e67-4908-4c66-9d9c-ea347cfcc783" name="Changes" comment="" />
-      <created>1695083640163</created>
+      <changelist id="386e5f5d-e15c-429a-9e4d-bbd29db8fb32" name="Changes" comment="" />
+      <created>1695113501946</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1695083640163</updated>
-      <workItem from="1695083643957" duration="5231000" />
+      <updated>1695113501946</updated>
+      <workItem from="1695113504451" duration="1359000" />
     </task>
     <servers />
   </component>
