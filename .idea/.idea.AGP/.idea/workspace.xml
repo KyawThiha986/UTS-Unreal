@@ -9,9 +9,20 @@
   <component name="ChangeListManager">
     <list default="true" id="386e5f5d-e15c-429a-9e4d-bbd29db8fb32" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AGP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerCharacter.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_WeaponPickup.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_WeaponPickup.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Inputs/CharacterInputMapping.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Inputs/CharacterInputMapping.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/PickupBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/ShooterMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ShooterMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/BaseCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/EnemyCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Characters/PlayerCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pathfinding/NavigationNode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pathfinding/NavigationNode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AGP/Pickups/WeaponPickup.h" afterDir="false" />
     </list>
@@ -22,6 +33,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -128,6 +145,8 @@
       <updated>1695113501946</updated>
       <workItem from="1695113504451" duration="1960000" />
       <workItem from="1695442945833" duration="15268000" />
+      <workItem from="1695532277020" duration="7097000" />
+      <workItem from="1695548362073" duration="22740000" />
     </task>
     <servers />
   </component>

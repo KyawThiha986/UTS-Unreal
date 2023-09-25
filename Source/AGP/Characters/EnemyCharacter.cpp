@@ -5,6 +5,7 @@
 #include "EngineUtils.h"
 #include "HealthComponent.h"
 #include "PlayerCharacter.h"
+#include "../Pickups/WeaponComponent.h"
 #include "AGP/Pathfinding/PathfindingSubsystem.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -75,7 +76,23 @@ void AEnemyCharacter::TickEngage()
 		CurrentPath = PathfindingSubsystem->GetPath(GetActorLocation(), SensedCharacter->GetActorLocation());
 	}
 	MoveAlongPath();
-	Fire(SensedCharacter->GetActorLocation());
+
+	if (WeaponComponent)
+	{
+		if (WeaponComponent -> Ammo > 0)
+		{
+			Fire(SensedCharacter->GetActorLocation());
+		}
+		else if (WeaponComponent -> Ammo <= 0 && OuttaAmmo == false)
+		{
+			OuttaAmmo = true;
+			WeaponComponent -> Reload();
+		}
+		if (WeaponComponent -> CurrentReloadTime > WeaponComponent -> WeaponStats.ReloadTime)
+		{
+			OuttaAmmo = false;
+		}
+	}
 }
 
 void AEnemyCharacter::TickEvade()

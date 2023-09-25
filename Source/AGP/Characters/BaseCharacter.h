@@ -21,7 +21,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasWeapon();
 
-	void EquipWeapon(bool bEquipWeapon);
+	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
 

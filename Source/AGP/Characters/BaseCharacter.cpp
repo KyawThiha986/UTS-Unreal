@@ -47,12 +47,17 @@ bool ABaseCharacter::HasWeapon()
 	return false;
 }
 
-void ABaseCharacter::EquipWeapon(bool bEquipWeapon)
+void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats)
 {
 	if (bEquipWeapon && !HasWeapon())
 	{
 		WeaponComponent = NewObject<UWeaponComponent>(this);
-		WeaponComponent->RegisterComponent();
+		if (WeaponComponent)
+		{
+			WeaponComponent->RegisterComponent();
+			WeaponComponent->SetWeaponStats(NewWeaponStats);
+			WeaponComponent->Ammo = NewWeaponStats.MagazineSize;
+		}
 	}
 	else if (!bEquipWeapon && HasWeapon())
 	{

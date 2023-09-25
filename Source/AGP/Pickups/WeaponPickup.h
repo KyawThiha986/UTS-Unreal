@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	EWeaponRarity WeaponRarity = EWeaponRarity::Common;
 
-	FWeaponStats WeaponStats;
+	FWeaponStats WeaponPickupStats;
 	void GenerateWeaponPickup();
 	void RollStats();
 	

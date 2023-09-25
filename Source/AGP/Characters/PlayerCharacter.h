@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.h"
 #include "InputActionValue.h"
+#include "../Pickups/WeaponComponent.h"
 #include "PlayerCharacter.generated.h"
 
 class UInputMappingContext;
@@ -33,6 +34,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* FireAction;
 	UPROPERTY(EditDefaultsOnly)
+	UInputAction* ReloadAction;
+	UPROPERTY(EditDefaultsOnly)
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -50,5 +53,5 @@ private:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void FireWeapon(const FInputActionValue& Value);
-
+	void Reload(const FInputActionValue& Value);
 };
