@@ -56,7 +56,8 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		{
 			WeaponComponent->RegisterComponent();
 			WeaponComponent->SetWeaponStats(NewWeaponStats);
-			WeaponComponent->Ammo = NewWeaponStats.MagazineSize;
+			WeaponComponent->SetFinalStats();
+			WeaponComponent->Ammo = WeaponComponent->FinalWeaponStats.MagazineSize;
 		}
 	}
 	else if (!bEquipWeapon && HasWeapon())
@@ -65,6 +66,15 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		WeaponComponent = nullptr;
 	}
 	EquipWeaponGraphical(bEquipWeapon);
+}
+
+void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
+{
+	if(WeaponComponent != nullptr)
+	{
+		WeaponComponent -> SetBarrelStats(NewBarrelStats);
+		WeaponComponent -> SetFinalStats();
+	}
 }
 
 // Called to bind functionality to input

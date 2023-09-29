@@ -22,6 +22,7 @@ public:
 	bool HasWeapon();
 
 	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
+	void EquipBarrel(const FBarrelStats NewBarrelStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
 

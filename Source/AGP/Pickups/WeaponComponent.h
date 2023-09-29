@@ -17,11 +17,35 @@ struct FWeaponStats
 	GENERATED_BODY()
 public:
 	EWeaponType WeaponType = EWeaponType::Rifle;
-	float Accuracy = 1.0f;
-	float FireRate = 0.2f;
+	float Accuracy = 0.8f;
+	float FireRate = 0.5f;
 	float BaseDamage = 10.0f;
-	int32 MagazineSize = 5;
-	float ReloadTime = 1.0f;
+	int32 MagazineSize = 8;
+	float ReloadTime = 4.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FBarrelStats
+{
+	GENERATED_BODY()
+public:
+	float Accuracy = 0.0f;
+	float FireRate = 0.0f;
+	float BaseDamage = 0.0f;
+	int32 MagazineSize = 0;
+	float ReloadTime = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FFinalWeaponStats
+{
+	GENERATED_BODY()
+public:
+	float Accuracy = 0.8f;
+	float FireRate = 0.5f;
+	float BaseDamage = 10.0f;
+	int32 MagazineSize = 8;
+	float ReloadTime = 4.0f;
 };
 
 UCLASS()
@@ -40,6 +64,25 @@ public:
 		WeaponStats.MagazineSize = NewWeaponStats.MagazineSize;
 		WeaponStats.ReloadTime = NewWeaponStats.ReloadTime;
 	}
+	
+	void SetBarrelStats(FBarrelStats NewBarrelStats)
+	{
+		BarrelStats.Accuracy = NewBarrelStats.Accuracy;
+		BarrelStats.FireRate = NewBarrelStats.FireRate;
+		BarrelStats.BaseDamage = NewBarrelStats.BaseDamage;
+		BarrelStats.MagazineSize = NewBarrelStats.MagazineSize;
+		BarrelStats.ReloadTime = NewBarrelStats.ReloadTime;
+	}
+	
+	void SetFinalStats()
+	{
+		FinalWeaponStats.Accuracy = WeaponStats.Accuracy + BarrelStats.Accuracy;
+		FinalWeaponStats.FireRate = WeaponStats.FireRate - BarrelStats.FireRate;
+		FinalWeaponStats.BaseDamage = WeaponStats.BaseDamage + BarrelStats.BaseDamage;
+		FinalWeaponStats.MagazineSize = WeaponStats.MagazineSize + BarrelStats.MagazineSize;
+		FinalWeaponStats.ReloadTime = WeaponStats.ReloadTime - BarrelStats.ReloadTime;
+	}
+	
 	int32 Ammo;
 	bool IsReloading = false;
 	float CurrentReloadTime;
@@ -47,6 +90,8 @@ public:
 	void Reload();
 
 	FWeaponStats WeaponStats;
+	FBarrelStats BarrelStats;
+	FFinalWeaponStats FinalWeaponStats;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

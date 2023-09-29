@@ -26,15 +26,14 @@ void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	TimeSinceLastShot += DeltaTime;
-	UE_LOG(LogTemp, Log, TEXT("Your float value: %i"), Ammo);
 	if (IsReloading == true)
 	{
 		CurrentReloadTime += DeltaTime;
 	}
 	
-	if (CurrentReloadTime > WeaponStats.ReloadTime && IsReloading == true)
+	if (CurrentReloadTime > FinalWeaponStats.ReloadTime && IsReloading == true)
 	{
-		Ammo = WeaponStats.MagazineSize;
+		Ammo = FinalWeaponStats.MagazineSize;
 		IsReloading = false;
 		UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded!"));
 	}
@@ -43,23 +42,35 @@ void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 bool UWeaponComponent::Fire(const FVector& BulletStart, const FVector& FireAtLocation)
 {
 	// Determine if the character is able to fire.
-	if (TimeSinceLastShot < WeaponStats.FireRate)
+	if (TimeSinceLastShot < FinalWeaponStats.FireRate)
 	{
 		return false;
 	}
 
+	// Creates a random direction vector.
+	FVector RandomFireAt = FMath::VRand();
+	float CurrentShotDistance = FVector::Distance(BulletStart, FireAtLocation);
+	// Makes that random direction vector the same length as the current shot between the bullet start and fire at location.
+	RandomFireAt *= CurrentShotDistance;
+	// Offsets the direction vector by the Bullet Start position making this RandomFireAt now contain a random position
+	// somewhere on the surface a sphere surrounding the bullet start position. The original FireAtLocation is also on
+	// the surface of this same sphere.
+	RandomFireAt += BulletStart;
+	// Now we just need to blend between these two positions based on the accuracy value.
+	FVector AccuracyAdjustedFireAt = FMath::Lerp(RandomFireAt, FireAtLocation, FinalWeaponStats.Accuracy);
+	
 	if (Ammo > 0)
 	{
 		FHitResult HitResult;
     	FCollisionQueryParams QueryParams;
     	QueryParams.AddIgnoredActor(GetOwner());
-    	if (GetWorld()->LineTraceSingleByChannel(HitResult, BulletStart, FireAtLocation, ECC_Pawn, QueryParams))
+    	if (GetWorld()->LineTraceSingleByChannel(HitResult, BulletStart, AccuracyAdjustedFireAt, ECC_Pawn, QueryParams))
     	{
     		if (ABaseCharacter* HitCharacter = Cast<ABaseCharacter>(HitResult.GetActor()))
     		{
     			if (UHealthComponent* HitCharacterHealth = HitCharacter->GetComponentByClass<UHealthComponent>())
     			{
-    				HitCharacterHealth->ApplyDamage(WeaponStats.BaseDamage);
+    				HitCharacterHealth->ApplyDamage(FinalWeaponStats.BaseDamage);
     			}
     			DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
     		}
@@ -71,7 +82,7 @@ bool UWeaponComponent::Fire(const FVector& BulletStart, const FVector& FireAtLoc
     	}
     	else
     	{
-    		DrawDebugLine(GetWorld(), BulletStart, FireAtLocation, FColor::Red, false, 1.0f);
+    		DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
     	}
 		TimeSinceLastShot = 0.0f;
 		Ammo -= 1;
@@ -88,11 +99,12 @@ void UWeaponComponent::Reload()
 	CurrentReloadTime = 0.0f;
 	Ammo = 0;
 	IsReloading = true;
-	UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponStats.Accuracy);
-	UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponStats.FireRate);
-	UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponStats.BaseDamage);
-	UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponStats.MagazineSize);
-	UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponStats.ReloadTime);
+	UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), FinalWeaponStats.Accuracy);
+	UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), FinalWeaponStats.FireRate);
+	UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), FinalWeaponStats.BaseDamage);
+	UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), FinalWeaponStats.MagazineSize);
+	UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), FinalWeaponStats.ReloadTime);
+	
 	//Ammo = WeaponStats.MagazineSize;
 	//UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded!"));
 }
