@@ -6,6 +6,7 @@
 #include "AGPGameInstance.h"
 #include "Pathfinding/PathfindingSubsystem.h"
 
+//Retrieve waypoint positions and set them as possible pickup spawns
 void UPickupManagerSystem::PopulateSpawnLocations()
 {
 	PossibleSpawnLocations.Empty();
@@ -57,7 +58,30 @@ void UPickupManagerSystem::SpawnBarrelPickup()
 		
 		ABarrelPickup* Pickup = GetWorld()->SpawnActor<ABarrelPickup>(
 		GameInstance->GetBarrelPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-		UE_LOG(LogTemp, Display, TEXT("Weapon Pickup Spawned"))
+		UE_LOG(LogTemp, Display, TEXT("Sights Pickup Spawned"))
+	}
+}
+
+void UPickupManagerSystem::SpawnSightsPickup()
+{
+	//If possible spawn locations array is empty, write a log and return nothing
+	if (PossibleSpawnLocations.IsEmpty())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup."))
+		return;
+	}
+	//Otherwise, Spawn a pickup at a position designated by random range
+	if (const UAGPGameInstance* GameInstance =
+	GetWorld()->GetGameInstance<UAGPGameInstance>())
+	{
+		FVector SpawnPosition =
+		PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
+		1)];
+		SpawnPosition.Z += 50.0f;
+		
+		ASightsPickup* Pickup = GetWorld()->SpawnActor<ASightsPickup>(
+		GameInstance->GetSightsPickupClass(),SpawnPosition,FRotator::ZeroRotator);
+		UE_LOG(LogTemp, Display, TEXT("Sights Pickup Spawned"))
 	}
 }
 
@@ -74,6 +98,7 @@ void UPickupManagerSystem::Tick(float DeltaTime)
 	{
 		SpawnWeaponPickup();
 		SpawnBarrelPickup();
+		SpawnSightsPickup();
 		TimeSinceLastSpawn = 0.0f;
 	}
 }

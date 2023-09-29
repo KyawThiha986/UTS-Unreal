@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "Pickups/BarrelPickup.h"
 #include "Pickups/WeaponPickup.h"
+#include "Pickups/SightsPickup.h"
 #include "AGPGameInstance.generated.h"
 
 /**
@@ -19,10 +20,13 @@ class AGP_API UAGPGameInstance : public UGameInstance
 	public:
 	UClass* GetWeaponPickupClass() const;
 	UClass* GetBarrelPickupClass() const;
+	UClass* GetSightsPickupClass() const;
 	
 	protected:
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<AWeaponPickup> WeaponPickupClass;
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<ABarrelPickup> BarrelPickupClass;
+	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
+	TSubclassOf<ASightsPickup> SightsPickupClass;
 };

@@ -13,3 +13,8 @@ UClass* UAGPGameInstance::GetBarrelPickupClass() const
 {
 	return BarrelPickupClass.Get();
 }
+
+UClass* UAGPGameInstance::GetSightsPickupClass() const
+{
+	return SightsPickupClass.Get();
+}

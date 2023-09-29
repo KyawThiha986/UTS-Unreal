@@ -23,6 +23,7 @@ public:
 
 	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
 	void EquipBarrel(const FBarrelStats NewBarrelStats);
+	void EquipSights(const FSightsStats NewSightsStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
 
@@ -48,6 +49,17 @@ protected:
 	 * @return true if a shot was taken and false otherwise.
 	 */
 	bool Fire(const FVector& FireAtLocation);
+	void CheckStatCap()
+	{
+		if(WeaponComponent -> FinalWeaponStats.Accuracy > 0.999f)
+		{
+			WeaponComponent -> FinalWeaponStats.Accuracy = 0.999f;
+		}
+		if(WeaponComponent -> FinalWeaponStats.FireRate < 0.015f)
+		{
+			WeaponComponent -> FinalWeaponStats.Accuracy = 0.015f;
+		}
+	};
 
 	UPROPERTY();
 	UWeaponComponent* WeaponComponent = nullptr;

@@ -52,19 +52,32 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 	if (bEquipWeapon && !HasWeapon())
 	{
 		WeaponComponent = NewObject<UWeaponComponent>(this);
-		if (WeaponComponent)
-		{
-			WeaponComponent->RegisterComponent();
-			WeaponComponent->SetWeaponStats(NewWeaponStats);
-			WeaponComponent->SetFinalStats();
-			WeaponComponent->Ammo = WeaponComponent->FinalWeaponStats.MagazineSize;
-		}
+		WeaponComponent->RegisterComponent();
 	}
 	else if (!bEquipWeapon && HasWeapon())
 	{
 		WeaponComponent->UnregisterComponent();
 		WeaponComponent = nullptr;
 	}
+
+	// At this point we should have a WeaponComponent if we are trying to equip a weapon.
+	if (HasWeapon())
+	{
+		// Set the weapons stats to the given weapon stats.
+		WeaponComponent->SetWeaponStats(NewWeaponStats);
+		WeaponComponent -> SetFinalStats();
+		WeaponComponent -> Ammo = WeaponComponent -> FinalWeaponStats.MagazineSize;
+		CheckStatCap();
+		if(WeaponComponent)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
+			UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
+			UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
+			UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
+			UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+		}
+	}
+	
 	EquipWeaponGraphical(bEquipWeapon);
 }
 
@@ -74,6 +87,27 @@ void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 	{
 		WeaponComponent -> SetBarrelStats(NewBarrelStats);
 		WeaponComponent -> SetFinalStats();
+		CheckStatCap();
+		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
+		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
+		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
+		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
+		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+	}
+}
+
+void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
+{
+	if(WeaponComponent != nullptr)
+	{
+		WeaponComponent -> SetSightsStats(NewSightsStats);
+		WeaponComponent -> SetFinalStats();
+		CheckStatCap();
+		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
+		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
+		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
+		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
+		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
 	}
 }
 

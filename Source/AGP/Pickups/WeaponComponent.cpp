@@ -99,11 +99,6 @@ void UWeaponComponent::Reload()
 	CurrentReloadTime = 0.0f;
 	Ammo = 0;
 	IsReloading = true;
-	UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), FinalWeaponStats.Accuracy);
-	UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), FinalWeaponStats.FireRate);
-	UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), FinalWeaponStats.BaseDamage);
-	UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), FinalWeaponStats.MagazineSize);
-	UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), FinalWeaponStats.ReloadTime);
 	
 	//Ammo = WeaponStats.MagazineSize;
 	//UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded!"));
