@@ -99,7 +99,6 @@ void UWeaponComponent::Reload()
 	CurrentReloadTime = 0.0f;
 	Ammo = 0;
 	IsReloading = true;
-	
 	//Ammo = WeaponStats.MagazineSize;
 	//UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded!"));
 }

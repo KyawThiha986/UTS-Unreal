@@ -32,7 +32,7 @@ void ASightsPickup::GenerateSightsPickup()
 	if(Odds <= 5.0f)
 	{
 		SightsRarity = ESightsRarity::Legendary;
-		SightsPickupStats.Accuracy = FMath::RandRange(0.045f, 0.6f);
+		SightsPickupStats.Accuracy = FMath::RandRange(0.022f, 0.3f);
 		MaxBonusRoll = 2;
 		RollBonuses();
 	}
@@ -40,7 +40,7 @@ void ASightsPickup::GenerateSightsPickup()
 	else if(Odds > 5.0f && Odds <= 20.0f)
 	{
 		SightsRarity = ESightsRarity::Master;
-		SightsPickupStats.Accuracy = FMath::RandRange(0.04f, 0.055f);
+		SightsPickupStats.Accuracy = FMath::RandRange(0.02f, 0.028f);
 		MaxBonusRoll = 1;
 		RollBonuses();
 	}
@@ -48,7 +48,7 @@ void ASightsPickup::GenerateSightsPickup()
 	else if(Odds > 20.0f && Odds <= 50.0f)
 	{
 		SightsRarity = ESightsRarity::Rare;
-		SightsPickupStats.Accuracy = FMath::RandRange(0.02f, 0.035f);
+		SightsPickupStats.Accuracy = FMath::RandRange(0.01f, 0.018f);
 		MaxBonusRoll = 1;
 		RollBonuses();
 	}
@@ -56,7 +56,7 @@ void ASightsPickup::GenerateSightsPickup()
 	else
 	{
 		SightsRarity = ESightsRarity::Common;
-		SightsPickupStats.Accuracy = FMath::RandRange(0.015f, 0.03f);
+		SightsPickupStats.Accuracy = FMath::RandRange(0.008f, 0.016f);
 	}
 
 	//Determine the stats depending on whether it is good or bad
@@ -74,26 +74,26 @@ void ASightsPickup::RollBonuses()
 			BonusPick = FMath::RandRange(1, 5);
 			if (BonusPick == 1)
 			{
-				SightsPickupStats.Accuracy += FMath::RandRange(0.02f, 0.035f);
+				SightsPickupStats.Accuracy += FMath::RandRange(0.008f, 0.016f);
 				BonusRoll += 1;
 				break;
 			}
 			if (BonusPick == 2)
 			{
-				SightsPickupStats.FireRate += FMath::RandRange(0.05f, 0.08f);
+				SightsPickupStats.FireRate += FMath::RandRange(0.03f, 0.07f);
 				BonusRoll += 1;
 				break;
 				
 			}
 			if (BonusPick == 3)
 			{
-				SightsPickupStats.BaseDamage += FMath::RandRange(15.0f, 30.0f);
+				SightsPickupStats.BaseDamage += FMath::RandRange(4.0f, 8.0f);
 				BonusRoll += 1;
 				break;
 			}
 			if (BonusPick == 4)
 			{
-				SightsPickupStats.MagazineSize += FMath::RandRange(2, 4);
+				SightsPickupStats.MagazineSize += FMath::RandRange(3, 6);
 				BonusRoll += 1;
 				break;
 			}

@@ -81,10 +81,13 @@ void APlayerCharacter::FireWeapon(const FInputActionValue& Value)
 
 void APlayerCharacter::Reload(const FInputActionValue& Value)
 {
-	if (WeaponComponent->IsReloading == false)
+	if(WeaponComponent != nullptr)
 	{
-		WeaponComponent->Reload();
-		WeaponComponent->IsReloading = true;
+		if (WeaponComponent->IsReloading == false)
+		{
+			WeaponComponent->Reload();
+			WeaponComponent->IsReloading = true;
+		}
 	}
 }
 

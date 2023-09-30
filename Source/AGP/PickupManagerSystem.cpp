@@ -35,7 +35,6 @@ void UPickupManagerSystem::SpawnWeaponPickup()
 		
 		AWeaponPickup* Pickup = GetWorld()->SpawnActor<AWeaponPickup>(
 		GameInstance->GetWeaponPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-		UE_LOG(LogTemp, Display, TEXT("Weapon Pickup Spawned"))
 	}
 }
 
@@ -58,7 +57,6 @@ void UPickupManagerSystem::SpawnBarrelPickup()
 		
 		ABarrelPickup* Pickup = GetWorld()->SpawnActor<ABarrelPickup>(
 		GameInstance->GetBarrelPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-		UE_LOG(LogTemp, Display, TEXT("Sights Pickup Spawned"))
 	}
 }
 
@@ -81,7 +79,29 @@ void UPickupManagerSystem::SpawnSightsPickup()
 		
 		ASightsPickup* Pickup = GetWorld()->SpawnActor<ASightsPickup>(
 		GameInstance->GetSightsPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-		UE_LOG(LogTemp, Display, TEXT("Sights Pickup Spawned"))
+	}
+}
+
+void UPickupManagerSystem::SpawnMagazinePickup()
+{
+	//If possible spawn locations array is empty, write a log and return nothing
+	if (PossibleSpawnLocations.IsEmpty())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unable to spawn weapon pickup."))
+		return;
+	}
+	//Otherwise, Spawn a pickup at a position designated by random range
+	if (const UAGPGameInstance* GameInstance =
+	GetWorld()->GetGameInstance<UAGPGameInstance>())
+	{
+		FVector SpawnPosition =
+		PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
+		1)];
+		SpawnPosition.Z += 50.0f;
+		
+		AMagazinePickup* Pickup = GetWorld()->SpawnActor<AMagazinePickup>(
+		GameInstance->GetMagazinePickupClass(),SpawnPosition,FRotator::ZeroRotator);
+		UE_LOG(LogTemp, Display, TEXT("Magazine Pickup Spawned"))
 	}
 }
 
@@ -99,6 +119,7 @@ void UPickupManagerSystem::Tick(float DeltaTime)
 		SpawnWeaponPickup();
 		SpawnBarrelPickup();
 		SpawnSightsPickup();
+		SpawnMagazinePickup();
 		TimeSinceLastSpawn = 0.0f;
 	}
 }

@@ -17,7 +17,7 @@ struct FWeaponStats
 	GENERATED_BODY()
 public:
 	EWeaponType WeaponType = EWeaponType::Rifle;
-	float Accuracy = 0.8f;
+	float Accuracy = 0.9f;
 	float FireRate = 0.5f;
 	float BaseDamage = 10.0f;
 	int32 MagazineSize = 8;
@@ -38,6 +38,18 @@ public:
 
 USTRUCT(BlueprintType)
 struct FSightsStats
+{
+	GENERATED_BODY()
+public:
+	float Accuracy = 0.0f;
+	float FireRate = 0.0f;
+	float BaseDamage = 0.0f;
+	int32 MagazineSize = 0;
+	float ReloadTime = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FMagazineStats
 {
 	GENERATED_BODY()
 public:
@@ -94,14 +106,23 @@ public:
 		SightsStats.MagazineSize = NewSightsStats.MagazineSize;
 		SightsStats.ReloadTime = NewSightsStats.ReloadTime;
 	}
+
+	void SetMagazineStats(FMagazineStats NewMagazineStats)
+	{
+		MagazineStats.Accuracy = NewMagazineStats.Accuracy;
+		MagazineStats.FireRate = NewMagazineStats.FireRate;
+		MagazineStats.BaseDamage = NewMagazineStats.BaseDamage;
+		MagazineStats.MagazineSize = NewMagazineStats.MagazineSize;
+		MagazineStats.ReloadTime = NewMagazineStats.ReloadTime;
+	}
 	
 	void SetFinalStats()
 	{
-		FinalWeaponStats.Accuracy = WeaponStats.Accuracy + BarrelStats.Accuracy + SightsStats.Accuracy;
-		FinalWeaponStats.FireRate = WeaponStats.FireRate - ( BarrelStats.FireRate + SightsStats.FireRate);
-		FinalWeaponStats.BaseDamage = WeaponStats.BaseDamage + BarrelStats.BaseDamage + SightsStats.BaseDamage;
-		FinalWeaponStats.MagazineSize = WeaponStats.MagazineSize + BarrelStats.MagazineSize + SightsStats.MagazineSize;
-		FinalWeaponStats.ReloadTime = WeaponStats.ReloadTime - ( BarrelStats.ReloadTime + SightsStats.ReloadTime );
+		FinalWeaponStats.Accuracy = WeaponStats.Accuracy + BarrelStats.Accuracy + SightsStats.Accuracy + MagazineStats.Accuracy;
+		FinalWeaponStats.FireRate = WeaponStats.FireRate - ( BarrelStats.FireRate + SightsStats.FireRate + MagazineStats.FireRate);
+		FinalWeaponStats.BaseDamage = WeaponStats.BaseDamage + BarrelStats.BaseDamage + SightsStats.BaseDamage + MagazineStats.BaseDamage;
+		FinalWeaponStats.MagazineSize = WeaponStats.MagazineSize + BarrelStats.MagazineSize + SightsStats.MagazineSize + MagazineStats.MagazineSize;
+		FinalWeaponStats.ReloadTime = WeaponStats.ReloadTime - ( BarrelStats.ReloadTime + SightsStats.ReloadTime + MagazineStats.ReloadTime);
 	}
 	
 	int32 Ammo;
@@ -110,9 +131,12 @@ public:
 	float EnemyReloadTime; 
 	void Reload();
 
+	//Declare stats for weapon and attachments
 	FWeaponStats WeaponStats;
 	FBarrelStats BarrelStats;
 	FSightsStats SightsStats;
+	FSightsStats MagazineStats;
+	
 	FFinalWeaponStats FinalWeaponStats;
 protected:
 	// Called when the game starts or when spawned

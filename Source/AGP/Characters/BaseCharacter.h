@@ -24,8 +24,10 @@ public:
 	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
 	void EquipBarrel(const FBarrelStats NewBarrelStats);
 	void EquipSights(const FSightsStats NewSightsStats);
+	void EquipMagazine(const FMagazineStats NewSightsStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
+	bool IsWeaponEquipped = false;
 
 protected:
 	// Called when the game starts or when spawned
@@ -55,14 +57,35 @@ protected:
 		{
 			WeaponComponent -> FinalWeaponStats.Accuracy = 0.999f;
 		}
+		
 		if(WeaponComponent -> FinalWeaponStats.FireRate < 0.015f)
 		{
-			WeaponComponent -> FinalWeaponStats.Accuracy = 0.015f;
+			WeaponComponent -> FinalWeaponStats.FireRate = 0.015f;
+		}
+		
+		if(WeaponComponent -> FinalWeaponStats.ReloadTime < 0.2f)
+		{
+			WeaponComponent -> FinalWeaponStats.ReloadTime = 0.2f;
 		}
 	};
 
+	void OutputStatLog()
+	{
+		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
+		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
+		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
+		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
+		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+	}
+
 	UPROPERTY();
 	UWeaponComponent* WeaponComponent = nullptr;
+
+	int32 Ammo;
+	bool IsReloading = false;
+	float CurrentReloadTime;
+	float EnemyReloadTime; 
+	void Reload();
 
 public:	
 	// Called every frame

@@ -30,5 +30,6 @@ class AGP_API UPickupManagerSystem : public UTickableWorldSubsystem
 	void SpawnWeaponPickup();
 	void SpawnBarrelPickup();
 	void SpawnSightsPickup();
+	void SpawnMagazinePickup();
 	void Tick(float DeltaTime) override;
 };

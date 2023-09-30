@@ -20,7 +20,6 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 bool ABaseCharacter::Fire(const FVector& FireAtLocation)
@@ -53,11 +52,13 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 	{
 		WeaponComponent = NewObject<UWeaponComponent>(this);
 		WeaponComponent->RegisterComponent();
+		IsWeaponEquipped = true;
 	}
 	else if (!bEquipWeapon && HasWeapon())
 	{
 		WeaponComponent->UnregisterComponent();
 		WeaponComponent = nullptr;
+		IsWeaponEquipped = false;
 	}
 
 	// At this point we should have a WeaponComponent if we are trying to equip a weapon.
@@ -70,11 +71,7 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		CheckStatCap();
 		if(WeaponComponent)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
-			UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+			OutputStatLog();
 		}
 	}
 	
@@ -88,11 +85,7 @@ void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 		WeaponComponent -> SetBarrelStats(NewBarrelStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
-		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
-		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
-		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
-		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
-		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+		OutputStatLog();
 	}
 }
 
@@ -103,11 +96,18 @@ void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
 		WeaponComponent -> SetSightsStats(NewSightsStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
-		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
-		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
-		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
-		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
-		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+		OutputStatLog();
+	}
+}
+
+void ABaseCharacter::EquipMagazine(const FMagazineStats NewMagazineStats)
+{
+	if(WeaponComponent != nullptr)
+	{
+		WeaponComponent -> SetMagazineStats(NewMagazineStats);
+		WeaponComponent -> SetFinalStats();
+		CheckStatCap();
+		OutputStatLog();
 	}
 }
 

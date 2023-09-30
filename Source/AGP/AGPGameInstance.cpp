@@ -18,3 +18,8 @@ UClass* UAGPGameInstance::GetSightsPickupClass() const
 {
 	return SightsPickupClass.Get();
 }
+
+UClass* UAGPGameInstance::GetMagazinePickupClass() const
+{
+	return MagazinePickupClass.Get();
+}

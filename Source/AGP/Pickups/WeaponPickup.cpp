@@ -51,11 +51,11 @@ void AWeaponPickup::GenerateWeaponPickup()
 	else
 	{
 		WeaponRarity = EWeaponRarity::Common;
-		WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.98f);
-		WeaponPickupStats.FireRate = FMath::RandRange(0.2f, 1.0f);
-		WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 15.0f);
-		WeaponPickupStats.MagazineSize = FMath::RandRange(1, 19);
-		WeaponPickupStats.ReloadTime = FMath::RandRange(1.0f, 4.0f);
+		WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.93f);
+		WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
+		WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
+		WeaponPickupStats.MagazineSize = FMath::RandRange(10, 19);
+		WeaponPickupStats.ReloadTime = FMath::RandRange(3.0f, 4.0f);
 	}
 
 	//Determine the stats depending on whether it is good or bad
@@ -71,11 +71,11 @@ void AWeaponPickup::RollStats()
 	int32 GoodPick;
 	int32 CurrentRoll = 1;
 
-	WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.98f);
-	WeaponPickupStats.FireRate = FMath::RandRange(0.2f, 1.0f);
-	WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 15.0f);
-	WeaponPickupStats.MagazineSize = FMath::RandRange(1, 19);
-	WeaponPickupStats.ReloadTime = FMath::RandRange(1.0f, 4.0f);
+	WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.93f);
+	WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
+	WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
+	WeaponPickupStats.MagazineSize = FMath::RandRange(10, 19);
+	WeaponPickupStats.ReloadTime = FMath::RandRange(4.0f, 5.0f);
 
 	while (CurrentRoll <= MaxRoll)
 	{
@@ -85,14 +85,14 @@ void AWeaponPickup::RollStats()
 			if (GoodPick == 1 && IsAccuracyGood == false)
 			{
 				IsAccuracyGood = true;
-				WeaponPickupStats.Accuracy = FMath::RandRange(0.98f, 1.0f);
+				WeaponPickupStats.Accuracy = FMath::RandRange(0.93f, 0.96f);
 				CurrentRoll += 1;
 				break;
 			}
 			if (GoodPick == 2 && IsFireRateGood == false)
 			{
 				IsFireRateGood = true;
-				WeaponPickupStats.FireRate = FMath::RandRange(0.05f, 0.2f);
+				WeaponPickupStats.FireRate = FMath::RandRange(0.25f, 0.4f);
 				CurrentRoll += 1;
 				break;
 				
@@ -100,21 +100,21 @@ void AWeaponPickup::RollStats()
 			if (GoodPick == 3 && IsDamageGood == false)
 			{
 				IsFireRateGood = true;
-				WeaponPickupStats.BaseDamage = FMath::RandRange(15.0f, 30.0f);
+				WeaponPickupStats.BaseDamage = FMath::RandRange(9.0f, 20.0f);
 				CurrentRoll += 1;
 				break;
 			}
 			if (GoodPick == 4 && IsMagSizeGood == false)
 			{
 				IsMagSizeGood = true;
-				WeaponPickupStats.MagazineSize = FMath::RandRange(20, 100);
+				WeaponPickupStats.MagazineSize = FMath::RandRange(11, 20);
 				CurrentRoll += 1;
 				break;
 			}
 			if (GoodPick == 5 && IsReloadTimeGood == false)
 			{
 				IsReloadTimeGood = true;
-				WeaponPickupStats.ReloadTime = FMath::RandRange(0.1f, 1.0f);
+				WeaponPickupStats.ReloadTime = FMath::RandRange(2.5f, 4.0f);
 				CurrentRoll += 1;
 				break;
 			}
