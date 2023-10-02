@@ -27,9 +27,6 @@ class AGP_API UPickupManagerSystem : public UTickableWorldSubsystem
 	float TimeSinceLastSpawn = 0.0f;
 	
 	private:
-	void SpawnWeaponPickup();
-	void SpawnBarrelPickup();
-	void SpawnSightsPickup();
-	void SpawnMagazinePickup();
+	void SpawnPickups();
 	void Tick(float DeltaTime) override;
 };

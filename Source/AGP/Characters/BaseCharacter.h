@@ -24,7 +24,9 @@ public:
 	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
 	void EquipBarrel(const FBarrelStats NewBarrelStats);
 	void EquipSights(const FSightsStats NewSightsStats);
-	void EquipMagazine(const FMagazineStats NewSightsStats);
+	void EquipMagazine(const FMagazineStats NewMagazineStats);
+	void EquipGrip(const FGripStats NewGripStats);
+	void EquipStock(const FStockStats NewStockStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
 	bool IsWeaponEquipped = false;
@@ -71,11 +73,14 @@ protected:
 
 	void OutputStatLog()
 	{
-		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f"), WeaponComponent -> FinalWeaponStats.Accuracy);
-		UE_LOG(LogTemp, Log, TEXT("FireRate: %f"), WeaponComponent -> FinalWeaponStats.FireRate);
-		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
-		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
-		UE_LOG(LogTemp, Log, TEXT("Reload Time: %f"), WeaponComponent -> FinalWeaponStats.ReloadTime);
+		BulletsPerSecond = 1.0f / WeaponComponent -> FinalWeaponStats.FireRate;
+		AccuracyPercentage = WeaponComponent -> FinalWeaponStats.Accuracy * 100.0f;
+		
+		UE_LOG(LogTemp, Warning, TEXT("Accuracy: %f%%"), AccuracyPercentage);
+		UE_LOG(LogTemp, Warning, TEXT("FireRate: %fbps"), BulletsPerSecond);
+		UE_LOG(LogTemp, Warning, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
+		UE_LOG(LogTemp, Warning, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
+		UE_LOG(LogTemp, Warning, TEXT("Reload Time: %fs"), WeaponComponent -> FinalWeaponStats.ReloadTime);
 	}
 
 	UPROPERTY();
@@ -94,4 +99,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+	float BulletsPerSecond;
+	float AccuracyPercentage;
 };

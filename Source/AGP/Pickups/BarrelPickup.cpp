@@ -80,7 +80,7 @@ void ABarrelPickup::RollBonuses()
 			}
 			if (BonusPick == 2)
 			{
-				BarrelPickupStats.FireRate += FMath::RandRange(0.03f, 0.07f);
+				BarrelPickupStats.FireRate += FMath::RandRange(0.05f, 0.1f);
 				BonusRoll += 1;
 				break;
 				
@@ -99,7 +99,7 @@ void ABarrelPickup::RollBonuses()
 			}
 			if (BonusPick == 5)
 			{
-				BarrelPickupStats.ReloadTime += FMath::RandRange(0.15f, 0.3f);
+				BarrelPickupStats.ReloadTime += FMath::RandRange(0.4f, 0.8f);
 				BonusRoll += 1;
 				break;
 			}

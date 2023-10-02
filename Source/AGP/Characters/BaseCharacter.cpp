@@ -48,6 +48,7 @@ bool ABaseCharacter::HasWeapon()
 
 void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats)
 {
+	// If the player or enemy tries to equip a weapon and currently doesn't have one, add and register weapon component 
 	if (bEquipWeapon && !HasWeapon())
 	{
 		WeaponComponent = NewObject<UWeaponComponent>(this);
@@ -55,6 +56,7 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		IsWeaponEquipped = true;
 	}
 	else if (!bEquipWeapon && HasWeapon())
+	// If the player or enemy tries to unequip a weapon and currently has one equipped, unregister weapon component and remove it completely 
 	{
 		WeaponComponent->UnregisterComponent();
 		WeaponComponent = nullptr;
@@ -80,6 +82,7 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 
 void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 {
+	// If weapon component exists, change the barrel's stats to the new one. Then, calculate the gun's new final stats
 	if(WeaponComponent != nullptr)
 	{
 		WeaponComponent -> SetBarrelStats(NewBarrelStats);
@@ -91,6 +94,7 @@ void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 
 void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
 {
+	// If weapon component exists, change the sight's stats to the new one. Then, calculate the gun's new final stats
 	if(WeaponComponent != nullptr)
 	{
 		WeaponComponent -> SetSightsStats(NewSightsStats);
@@ -102,9 +106,34 @@ void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
 
 void ABaseCharacter::EquipMagazine(const FMagazineStats NewMagazineStats)
 {
+	// If weapon component exists, change the magazine's stats to the new one. Then, calculate the gun's new final stats
 	if(WeaponComponent != nullptr)
 	{
 		WeaponComponent -> SetMagazineStats(NewMagazineStats);
+		WeaponComponent -> SetFinalStats();
+		CheckStatCap();
+		OutputStatLog();
+	}
+}
+
+void ABaseCharacter::EquipGrip(const FGripStats NewGripStats)
+{
+	// If weapon component exists, change the grip's stats to the new one. Then, calculate the gun's new final stats
+	if(WeaponComponent != nullptr)
+	{
+		WeaponComponent -> SetGripStats(NewGripStats);
+		WeaponComponent -> SetFinalStats();
+		CheckStatCap();
+		OutputStatLog();
+	}
+}
+
+void ABaseCharacter::EquipStock(const FStockStats NewStockStats)
+{
+	// If weapon component exists, change the grip's stats to the new one. Then, calculate the gun's new final stats
+	if(WeaponComponent != nullptr)
+	{ 
+		WeaponComponent -> SetStockStats(NewStockStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
 		OutputStatLog();
@@ -115,6 +144,5 @@ void ABaseCharacter::EquipMagazine(const FMagazineStats NewMagazineStats)
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

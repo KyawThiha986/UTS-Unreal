@@ -1,18 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MagazinePickup.h"
+#include "StockPickup.h"
 
 #include "../Characters/PlayerCharacter.h"
 
-void AMagazinePickup::BeginPlay()
+void AStockPickup::BeginPlay()
 {
 	Super::BeginPlay();
-	GenerateMagazinePickup();
-	UpdateMagazinePickupMaterial();
+	GenerateStockPickup();
+	UpdateStockPickupMaterial();
 }
 
-void AMagazinePickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void AStockPickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                     UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& HitInfo)
 {
 	//Super::OnPickupOverlap(OverlappedComponent, OtherActor, OtherComponent, OtherBodyIndex, bFromSweep, HitInfo);
@@ -20,49 +20,49 @@ void AMagazinePickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	if (ABaseCharacter* Player = Cast<ABaseCharacter>(OtherActor))
 	{
-		Player->EquipMagazine(MagazinePickupStats);
+		Player->EquipStock(StockPickupStats);
 		Destroy();
 	}
 }
 
-void AMagazinePickup::GenerateMagazinePickup()
+void AStockPickup::GenerateStockPickup()
 {
 	float Odds = FMath::RandRange(0, 100);
 
 	if(Odds <= 5.0f)
 	{
-		MagazineRarity = EMagazineRarity::Legendary;
-		MagazinePickupStats.MagazineSize = FMath::RandRange(9, 12);
+		StockRarity = EStockRarity::Legendary;
+		StockPickupStats.ReloadTime += FMath::RandRange(1.55f, 1.95f);
 		MaxBonusRoll = 2;
 		RollBonuses();
 	}
 
 	else if(Odds > 5.0f && Odds <= 20.0f)
 	{
-		MagazineRarity = EMagazineRarity::Master;
-		MagazinePickupStats.MagazineSize = FMath::RandRange(8, 11);
+		StockRarity = EStockRarity::Master;
+		StockPickupStats.ReloadTime += FMath::RandRange(1.3f, 1.7f);
 		MaxBonusRoll = 1;
 		RollBonuses();
 	}
 
 	else if(Odds > 20.0f && Odds <= 50.0f)
 	{
-		MagazineRarity = EMagazineRarity::Rare;
-		MagazinePickupStats.MagazineSize = FMath::RandRange(4, 7);
+		StockRarity = EStockRarity::Rare;
+		StockPickupStats.ReloadTime += FMath::RandRange(0.65f, 1.05f);
 		MaxBonusRoll = 1;
 		RollBonuses();
 	}
 
 	else
 	{
-		MagazineRarity = EMagazineRarity::Common;
-		MagazinePickupStats.MagazineSize = FMath::RandRange(0.4f, 0.8f);
+		StockRarity = EStockRarity::Common;
+		StockPickupStats.ReloadTime += FMath::RandRange(0.4f, 0.8f);
 	}
 
 	//Determine the stats depending on whether it is good or bad
 }
 
-void AMagazinePickup::RollBonuses()
+void AStockPickup::RollBonuses()
 {
 	int32 BonusPick;
 	int32 BonusRoll = 1;
@@ -74,35 +74,36 @@ void AMagazinePickup::RollBonuses()
 			BonusPick = FMath::RandRange(1, 5);
 			if (BonusPick == 1)
 			{
-				MagazinePickupStats.Accuracy += FMath::RandRange(0.008f, 0.016f);
+				StockPickupStats.Accuracy += FMath::RandRange(0.008f, 0.016f);
 				BonusRoll += 1;
 				break;
 			}
 			if (BonusPick == 2)
 			{
-				MagazinePickupStats.FireRate += FMath::RandRange(0.05f, 0.1f);
+				StockPickupStats.FireRate += FMath::RandRange(0.05f, 0.1f);
 				BonusRoll += 1;
 				break;
 				
 			}
 			if (BonusPick == 3)
 			{
-				MagazinePickupStats.BaseDamage += FMath::RandRange(4.0f, 8.0f);
+				StockPickupStats.BaseDamage += FMath::RandRange(4.0f, 8.0f);
 				BonusRoll += 1;
 				break;
 			}
 			if (BonusPick == 4)
 			{
-				MagazinePickupStats.MagazineSize += FMath::RandRange(3, 6);
+				StockPickupStats.MagazineSize += FMath::RandRange(3, 6);
 				BonusRoll += 1;
 				break;
 			}
 			if (BonusPick == 5)
 			{
-				MagazinePickupStats.ReloadTime += FMath::RandRange(0.15f, 0.3f);
+				StockPickupStats.ReloadTime += FMath::RandRange(0.4f, 0.8f);
 				BonusRoll += 1;
 				break;
 			}
 		}		
 	}
 }
+

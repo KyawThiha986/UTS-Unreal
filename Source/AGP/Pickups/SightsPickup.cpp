@@ -80,7 +80,7 @@ void ASightsPickup::RollBonuses()
 			}
 			if (BonusPick == 2)
 			{
-				SightsPickupStats.FireRate += FMath::RandRange(0.03f, 0.07f);
+				SightsPickupStats.FireRate += FMath::RandRange(0.05f, 0.1f);
 				BonusRoll += 1;
 				break;
 				
@@ -99,7 +99,7 @@ void ASightsPickup::RollBonuses()
 			}
 			if (BonusPick == 5)
 			{
-				SightsPickupStats.ReloadTime += FMath::RandRange(0.15f, 0.3f);
+				SightsPickupStats.ReloadTime += FMath::RandRange(0.4f, 0.8f);
 				BonusRoll += 1;
 				break;
 			}

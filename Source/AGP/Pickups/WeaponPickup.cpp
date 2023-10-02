@@ -51,7 +51,7 @@ void AWeaponPickup::GenerateWeaponPickup()
 	else
 	{
 		WeaponRarity = EWeaponRarity::Common;
-		WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.93f);
+		WeaponPickupStats.Accuracy = FMath::RandRange(0.875f, 0.925f);
 		WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
 		WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
 		WeaponPickupStats.MagazineSize = FMath::RandRange(10, 19);
@@ -71,7 +71,7 @@ void AWeaponPickup::RollStats()
 	int32 GoodPick;
 	int32 CurrentRoll = 1;
 
-	WeaponPickupStats.Accuracy = FMath::RandRange(0.9f, 0.93f);
+	WeaponPickupStats.Accuracy = FMath::RandRange(0.875f, 0.925f);
 	WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
 	WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
 	WeaponPickupStats.MagazineSize = FMath::RandRange(10, 19);

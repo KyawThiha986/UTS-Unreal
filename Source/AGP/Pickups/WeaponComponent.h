@@ -61,6 +61,30 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FGripStats
+{
+	GENERATED_BODY()
+public:
+	float Accuracy = 0.0f;
+	float FireRate = 0.0f;
+	float BaseDamage = 0.0f;
+	int32 MagazineSize = 0;
+	float ReloadTime = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FStockStats
+{
+	GENERATED_BODY()
+public:
+	float Accuracy = 0.0f;
+	float FireRate = 0.0f;
+	float BaseDamage = 0.0f;
+	int32 MagazineSize = 0;
+	float ReloadTime = 0.0f;
+};
+
+USTRUCT(BlueprintType)
 struct FFinalWeaponStats
 {
 	GENERATED_BODY()
@@ -115,14 +139,33 @@ public:
 		MagazineStats.MagazineSize = NewMagazineStats.MagazineSize;
 		MagazineStats.ReloadTime = NewMagazineStats.ReloadTime;
 	}
-	
+
+	void SetGripStats(FGripStats NewGripStats)
+	{
+		GripStats.Accuracy = NewGripStats.Accuracy;
+		GripStats.FireRate = NewGripStats.FireRate;
+		GripStats.BaseDamage = NewGripStats.BaseDamage;
+		GripStats.MagazineSize = NewGripStats.MagazineSize;
+		GripStats.ReloadTime = NewGripStats.ReloadTime;
+	}
+
+	void SetStockStats(FStockStats NewStockStats)
+	{
+		StockStats.Accuracy = NewStockStats.Accuracy;
+		StockStats.FireRate = NewStockStats.FireRate;
+		StockStats.BaseDamage = NewStockStats.BaseDamage;
+		StockStats.MagazineSize = NewStockStats.MagazineSize;
+		StockStats.ReloadTime = NewStockStats.ReloadTime;
+	}
+
+	//Calculate total stats from combining all other stats
 	void SetFinalStats()
 	{
-		FinalWeaponStats.Accuracy = WeaponStats.Accuracy + BarrelStats.Accuracy + SightsStats.Accuracy + MagazineStats.Accuracy;
-		FinalWeaponStats.FireRate = WeaponStats.FireRate - ( BarrelStats.FireRate + SightsStats.FireRate + MagazineStats.FireRate);
-		FinalWeaponStats.BaseDamage = WeaponStats.BaseDamage + BarrelStats.BaseDamage + SightsStats.BaseDamage + MagazineStats.BaseDamage;
-		FinalWeaponStats.MagazineSize = WeaponStats.MagazineSize + BarrelStats.MagazineSize + SightsStats.MagazineSize + MagazineStats.MagazineSize;
-		FinalWeaponStats.ReloadTime = WeaponStats.ReloadTime - ( BarrelStats.ReloadTime + SightsStats.ReloadTime + MagazineStats.ReloadTime);
+		FinalWeaponStats.Accuracy = WeaponStats.Accuracy + BarrelStats.Accuracy + SightsStats.Accuracy + MagazineStats.Accuracy + GripStats.Accuracy + StockStats.Accuracy;
+		FinalWeaponStats.FireRate = WeaponStats.FireRate - ( BarrelStats.FireRate + SightsStats.FireRate + MagazineStats.FireRate + GripStats.FireRate + StockStats.FireRate );
+		FinalWeaponStats.BaseDamage = WeaponStats.BaseDamage + BarrelStats.BaseDamage + SightsStats.BaseDamage + MagazineStats.BaseDamage + GripStats.BaseDamage + StockStats.BaseDamage;
+		FinalWeaponStats.MagazineSize = WeaponStats.MagazineSize + BarrelStats.MagazineSize + SightsStats.MagazineSize + MagazineStats.MagazineSize + GripStats.MagazineSize + StockStats.MagazineSize;
+		FinalWeaponStats.ReloadTime = WeaponStats.ReloadTime - ( BarrelStats.ReloadTime + SightsStats.ReloadTime + MagazineStats.ReloadTime + GripStats.ReloadTime + StockStats.ReloadTime );
 	}
 	
 	int32 Ammo;
@@ -136,11 +179,16 @@ public:
 	FBarrelStats BarrelStats;
 	FSightsStats SightsStats;
 	FSightsStats MagazineStats;
-	
+	FSightsStats GripStats;
+	FStockStats StockStats;
+
+	//Declare combined stats
 	FFinalWeaponStats FinalWeaponStats;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 	int32 RoundsRemainingInMagazine;
 	float TimeSinceLastShot = 0.0f;
 

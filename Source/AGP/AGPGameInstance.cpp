@@ -23,3 +23,13 @@ UClass* UAGPGameInstance::GetMagazinePickupClass() const
 {
 	return MagazinePickupClass.Get();
 }
+
+UClass* UAGPGameInstance::GetGripPickupClass() const
+{
+	return GripPickupClass.Get();
+}
+
+UClass* UAGPGameInstance::GetStockPickupClass() const
+{
+	return StockPickupClass.Get();
+}
