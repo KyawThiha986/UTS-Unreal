@@ -4,12 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "Pickups/BarrelPickup.h"
 #include "Pickups/WeaponPickup.h"
-#include "Pickups/SightsPickup.h"
-#include "Pickups/MagazinePickup.h"
-#include "Pickups/GripPickup.h"
-#include "Pickups/StockPickup.h"
 #include "AGPGameInstance.generated.h"
 
 /**
@@ -22,15 +17,18 @@ class AGP_API UAGPGameInstance : public UGameInstance
 
 	public:
 	UClass* GetWeaponPickupClass() const;
+	/*
 	UClass* GetBarrelPickupClass() const;
 	UClass* GetSightsPickupClass() const;
 	UClass* GetMagazinePickupClass() const;
 	UClass* GetGripPickupClass() const;
 	UClass* GetStockPickupClass() const;
+	*/
 	
 	protected:
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<AWeaponPickup> WeaponPickupClass;
+	/*
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<ABarrelPickup> BarrelPickupClass;
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
@@ -41,4 +39,5 @@ class AGP_API UAGPGameInstance : public UGameInstance
 	TSubclassOf<AGripPickup> GripPickupClass;
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<AStockPickup> StockPickupClass;
+	*/
 };

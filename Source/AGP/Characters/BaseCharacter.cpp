@@ -73,13 +73,18 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		CheckStatCap();
 		if(WeaponComponent)
 		{
-			OutputStatLog();
+			OutputWeaponStatLog();
+			//OutputBarrelBonusesLog();
+			//OutputSightsBonusesLog();
+			//OutputMagazineBonusesLog();
+			//OutputGripBonusesLog();
+			//OutputStockBonusesLog();
+			//OutputStatLog();
 		}
 	}
-	
 	EquipWeaponGraphical(bEquipWeapon);
 }
-
+/*
 void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 {
 	// If weapon component exists, change the barrel's stats to the new one. Then, calculate the gun's new final stats
@@ -88,6 +93,12 @@ void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
 		WeaponComponent -> SetBarrelStats(NewBarrelStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
+		OutputWeaponStatLog();
+		OutputBarrelBonusesLog();
+		OutputSightsBonusesLog();
+		OutputMagazineBonusesLog();
+		OutputGripBonusesLog();
+		OutputStockBonusesLog();
 		OutputStatLog();
 	}
 }
@@ -100,6 +111,12 @@ void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
 		WeaponComponent -> SetSightsStats(NewSightsStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
+		OutputWeaponStatLog();
+		OutputBarrelBonusesLog();
+		OutputSightsBonusesLog();
+		OutputMagazineBonusesLog();
+		OutputGripBonusesLog();
+		OutputStockBonusesLog();
 		OutputStatLog();
 	}
 }
@@ -112,6 +129,12 @@ void ABaseCharacter::EquipMagazine(const FMagazineStats NewMagazineStats)
 		WeaponComponent -> SetMagazineStats(NewMagazineStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
+		OutputWeaponStatLog();
+		OutputBarrelBonusesLog();
+		OutputSightsBonusesLog();
+		OutputMagazineBonusesLog();
+		OutputGripBonusesLog();
+		OutputStockBonusesLog();
 		OutputStatLog();
 	}
 }
@@ -124,6 +147,12 @@ void ABaseCharacter::EquipGrip(const FGripStats NewGripStats)
 		WeaponComponent -> SetGripStats(NewGripStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
+		OutputWeaponStatLog();
+		OutputBarrelBonusesLog();
+		OutputSightsBonusesLog();
+		OutputMagazineBonusesLog();
+		OutputGripBonusesLog();
+		OutputStockBonusesLog();
 		OutputStatLog();
 	}
 }
@@ -136,13 +165,30 @@ void ABaseCharacter::EquipStock(const FStockStats NewStockStats)
 		WeaponComponent -> SetStockStats(NewStockStats);
 		WeaponComponent -> SetFinalStats();
 		CheckStatCap();
+		OutputWeaponStatLog();
+        OutputBarrelBonusesLog();
+        OutputSightsBonusesLog();
+        OutputMagazineBonusesLog();
+		OutputGripBonusesLog();
+		OutputStockBonusesLog();
 		OutputStatLog();
 	}
 }
+*/
 
 // Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ABaseCharacter::EquipWeaponImplementation(bool bEquipWeapon, const FWeaponStats& WeaponStats)
+{
+	
+}
+
+void ABaseCharacter::MulticastEquipWeapon_Implementation(bool bEquipWeapon, const FWeaponStats& WeaponStats)
+{
+	
 }
 

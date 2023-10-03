@@ -40,6 +40,7 @@ void UPickupManagerSystem::SpawnPickups()
 		1)];
 		SpawnPosition.Z += 50.0f;
 
+		/*
 		ABarrelPickup* BarrelPickup = GetWorld()->SpawnActor<ABarrelPickup>(
 		GameInstance->GetBarrelPickupClass(),SpawnPosition,FRotator::ZeroRotator);
 
@@ -70,6 +71,7 @@ void UPickupManagerSystem::SpawnPickups()
 
 		AStockPickup* StockPickup = GetWorld()->SpawnActor<AStockPickup>(
 		GameInstance->GetStockPickupClass(),SpawnPosition,FRotator::ZeroRotator);
+		*/
 	}
 }
 
