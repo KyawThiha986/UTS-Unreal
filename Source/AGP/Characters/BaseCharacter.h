@@ -22,11 +22,6 @@ public:
 	bool HasWeapon();
 
 	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
-	//void EquipBarrel(const FBarrelStats NewBarrelStats);
-	//void EquipSights(const FSightsStats NewSightsStats);
-	//void EquipMagazine(const FMagazineStats NewMagazineStats);
-	//void EquipGrip(const FGripStats NewGripStats);
-	//void EquipStock(const FStockStats NewStockStats);
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
 	bool IsWeaponEquipped = false;
@@ -52,7 +47,7 @@ protected:
 	 * @param FireAtLocation The location that you want to fire at.
 	 * @return true if a shot was taken and false otherwise.
 	 */
-	bool Fire(const FVector& FireAtLocation);
+	void Fire(const FVector& FireAtLocation);
 	void CheckStatCap()
 	{
 		if(WeaponComponent -> FinalWeaponStats.Accuracy > 0.999f)
@@ -81,162 +76,14 @@ protected:
 		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> WeaponStats.MagazineSize);
 		UE_LOG(LogTemp, Log, TEXT("Reload Time: %fs"), WeaponComponent -> WeaponStats.ReloadTime);
 	}
-
-	void OutputBarrelBonusesLog()
-	{
-		AccuracyPercentage = WeaponComponent -> BarrelStats.Accuracy * 100.0f;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Barrel Bonuses"));
-		if (WeaponComponent -> BarrelStats.BaseDamage > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: +%f"), WeaponComponent -> BarrelStats.BaseDamage);
-		}
-		if (WeaponComponent -> BarrelStats.Accuracy > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: +%f%%"), AccuracyPercentage);
-		}
-		if (WeaponComponent -> BarrelStats.FireRate > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("FireRate: -%fs"), WeaponComponent -> BarrelStats.FireRate);
-		}
-		if (WeaponComponent -> BarrelStats.MagazineSize > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: +%i"), WeaponComponent -> BarrelStats.MagazineSize);
-		}
-		if (WeaponComponent -> BarrelStats.ReloadTime > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: -%fs"), WeaponComponent -> BarrelStats.ReloadTime);
-		}
-	}
-
-	void OutputSightsBonusesLog()
-	{
-		AccuracyPercentage = WeaponComponent -> SightsStats.Accuracy * 100.0f;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Sights Bonuses"));
-		if (WeaponComponent -> SightsStats.Accuracy > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: +%f%%"), AccuracyPercentage);
-		}
-		if (WeaponComponent -> SightsStats.FireRate > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("FireRate: -%fs"), WeaponComponent -> SightsStats.FireRate);
-		}
-		if (WeaponComponent -> SightsStats.BaseDamage > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: +%f"), WeaponComponent -> SightsStats.BaseDamage);
-		}
-		if (WeaponComponent -> SightsStats.MagazineSize > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: +%i"), WeaponComponent -> SightsStats.MagazineSize);
-		}
-		if (WeaponComponent -> SightsStats.ReloadTime > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: -%fs"), WeaponComponent -> SightsStats.ReloadTime);
-		}
-	}
-
-	void OutputMagazineBonusesLog()
-	{
-		AccuracyPercentage = WeaponComponent -> MagazineStats.Accuracy * 100.0f;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Magazine Bonuses"));
-		if (WeaponComponent -> MagazineStats.MagazineSize > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: +%i"), WeaponComponent -> MagazineStats.MagazineSize);
-		}
-		if (WeaponComponent -> MagazineStats.Accuracy > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: +%f%%"), AccuracyPercentage);
-		}
-		if (WeaponComponent -> MagazineStats.FireRate > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("FireRate: -%fs"), WeaponComponent -> MagazineStats.FireRate);
-		}
-		if (WeaponComponent -> MagazineStats.BaseDamage > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: +%f"), WeaponComponent -> MagazineStats.BaseDamage);
-		}
-		if (WeaponComponent -> MagazineStats.ReloadTime > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: -%fs"), WeaponComponent -> MagazineStats.ReloadTime);
-		}
-	}
-
-	void OutputGripBonusesLog()
-	{
-		AccuracyPercentage = WeaponComponent -> GripStats.Accuracy * 100.0f;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Grip Bonuses"));
-		if (WeaponComponent -> GripStats.FireRate > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("FireRate: -%fs"), WeaponComponent -> GripStats.FireRate);
-		}
-		if (WeaponComponent -> GripStats.Accuracy > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: +%f%%"), AccuracyPercentage);
-		}
-		if (WeaponComponent -> GripStats.BaseDamage > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: +%f"), WeaponComponent -> GripStats.BaseDamage);
-		}
-		if (WeaponComponent -> GripStats.MagazineSize > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: +%i"), WeaponComponent -> GripStats.MagazineSize);
-		}
-		if (WeaponComponent -> GripStats.ReloadTime > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: -%fs"), WeaponComponent -> GripStats.ReloadTime);
-		}
-	}
-
-	void OutputStockBonusesLog()
-	{
-		AccuracyPercentage = WeaponComponent -> StockStats.Accuracy * 100.0f;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Stock Bonuses"));
-		if (WeaponComponent -> StockStats.ReloadTime > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Reload Time: -%fs"), WeaponComponent -> StockStats.ReloadTime);
-		}
-		if (WeaponComponent -> StockStats.Accuracy > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Accuracy: +%f%%"), AccuracyPercentage);
-		}
-		if (WeaponComponent -> StockStats.FireRate > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("FireRate: -%fs"), WeaponComponent -> StockStats.FireRate);
-		}
-		if (WeaponComponent -> StockStats.BaseDamage > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("BaseDamage: +%f"), WeaponComponent -> StockStats.BaseDamage);
-		}
-		if (WeaponComponent -> StockStats.MagazineSize > 0.0f)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Magazine Size: +%i"), WeaponComponent -> StockStats.MagazineSize);
-		}
-	}
-
-	void OutputStatLog()
-	{
-		AccuracyPercentage = WeaponComponent -> FinalWeaponStats.Accuracy * 100.0f;
-
-		UE_LOG(LogTemp, Warning, TEXT("Final Stats"));
-		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f%%"), AccuracyPercentage);
-		UE_LOG(LogTemp, Log, TEXT("FireRate: %fs"), WeaponComponent -> FinalWeaponStats.FireRate);
-		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> FinalWeaponStats.BaseDamage);
-		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> FinalWeaponStats.MagazineSize);
-		UE_LOG(LogTemp, Log, TEXT("Reload Time: %fs"), WeaponComponent -> FinalWeaponStats.ReloadTime);
-	}
-
-	UPROPERTY();
+	
+	UPROPERTY(Replicated)
 	UWeaponComponent* WeaponComponent = nullptr;
 
 	int32 Ammo;
 	bool IsReloading = false;
 	float CurrentReloadTime;
 	float EnemyReloadTime; 
-	void Reload();
 
 public:	
 	// Called every frame
@@ -253,6 +100,7 @@ private:
 	const FWeaponStats& WeaponStats = FWeaponStats());
 	
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastEquipWeapon(bool bEquipWeapon,
-	const FWeaponStats& WeaponStats = FWeaponStats());
+	void MulticastEquipWeapon(bool bEquipWeapon);
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

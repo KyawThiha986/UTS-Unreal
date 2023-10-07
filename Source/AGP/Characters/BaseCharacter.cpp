@@ -3,11 +3,14 @@
 
 #include "BaseCharacter.h"
 
+#include "DDSFile.h"
 #include "HealthComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
+	bReplicates = true;
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -22,13 +25,12 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-bool ABaseCharacter::Fire(const FVector& FireAtLocation)
+void ABaseCharacter::Fire(const FVector& FireAtLocation)
 {
 	if (HasWeapon())
 	{
 		return WeaponComponent->Fire(BulletStartPosition->GetComponentLocation(),FireAtLocation);
 	}
-	return false;
 }
 
 // Called every frame
@@ -48,6 +50,21 @@ bool ABaseCharacter::HasWeapon()
 
 void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats)
 {
+	if(GetLocalRole() == ROLE_Authority)
+	{
+		EquipWeaponImplementation(bEquipWeapon, NewWeaponStats);
+		MulticastEquipWeapon(bEquipWeapon);
+	}
+}
+
+// Called to bind functionality to input
+void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ABaseCharacter::EquipWeaponImplementation(bool bEquipWeapon, const FWeaponStats& NewWeaponStats)
+{
 	// If the player or enemy tries to equip a weapon and currently doesn't have one, add and register weapon component 
 	if (bEquipWeapon && !HasWeapon())
 	{
@@ -56,139 +73,37 @@ void ABaseCharacter::EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeapon
 		IsWeaponEquipped = true;
 	}
 	else if (!bEquipWeapon && HasWeapon())
-	// If the player or enemy tries to unequip a weapon and currently has one equipped, unregister weapon component and remove it completely 
-	{
+		// If the player or enemy tries to unequip a weapon and currently has one equipped, unregister weapon component and remove it completely 
+		{
 		WeaponComponent->UnregisterComponent();
 		WeaponComponent = nullptr;
 		IsWeaponEquipped = false;
-	}
+		}
 
 	// At this point we should have a WeaponComponent if we are trying to equip a weapon.
 	if (HasWeapon())
 	{
 		// Set the weapons stats to the given weapon stats.
-		WeaponComponent->SetWeaponStats(NewWeaponStats);
-		WeaponComponent -> SetFinalStats();
-		WeaponComponent -> Ammo = WeaponComponent -> FinalWeaponStats.MagazineSize;
+		WeaponComponent -> SetWeaponStats(NewWeaponStats);
+		WeaponComponent -> Ammo = WeaponComponent -> WeaponStats.MagazineSize;
 		CheckStatCap();
 		if(WeaponComponent)
 		{
 			OutputWeaponStatLog();
-			//OutputBarrelBonusesLog();
-			//OutputSightsBonusesLog();
-			//OutputMagazineBonusesLog();
-			//OutputGripBonusesLog();
-			//OutputStockBonusesLog();
-			//OutputStatLog();
 		}
 	}
 	EquipWeaponGraphical(bEquipWeapon);
 }
-/*
-void ABaseCharacter::EquipBarrel(const FBarrelStats NewBarrelStats)
-{
-	// If weapon component exists, change the barrel's stats to the new one. Then, calculate the gun's new final stats
-	if(WeaponComponent != nullptr)
-	{
-		WeaponComponent -> SetBarrelStats(NewBarrelStats);
-		WeaponComponent -> SetFinalStats();
-		CheckStatCap();
-		OutputWeaponStatLog();
-		OutputBarrelBonusesLog();
-		OutputSightsBonusesLog();
-		OutputMagazineBonusesLog();
-		OutputGripBonusesLog();
-		OutputStockBonusesLog();
-		OutputStatLog();
-	}
-}
 
-void ABaseCharacter::EquipSights(const FSightsStats NewSightsStats)
+void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	// If weapon component exists, change the sight's stats to the new one. Then, calculate the gun's new final stats
-	if(WeaponComponent != nullptr)
-	{
-		WeaponComponent -> SetSightsStats(NewSightsStats);
-		WeaponComponent -> SetFinalStats();
-		CheckStatCap();
-		OutputWeaponStatLog();
-		OutputBarrelBonusesLog();
-		OutputSightsBonusesLog();
-		OutputMagazineBonusesLog();
-		OutputGripBonusesLog();
-		OutputStockBonusesLog();
-		OutputStatLog();
-	}
-}
-
-void ABaseCharacter::EquipMagazine(const FMagazineStats NewMagazineStats)
-{
-	// If weapon component exists, change the magazine's stats to the new one. Then, calculate the gun's new final stats
-	if(WeaponComponent != nullptr)
-	{
-		WeaponComponent -> SetMagazineStats(NewMagazineStats);
-		WeaponComponent -> SetFinalStats();
-		CheckStatCap();
-		OutputWeaponStatLog();
-		OutputBarrelBonusesLog();
-		OutputSightsBonusesLog();
-		OutputMagazineBonusesLog();
-		OutputGripBonusesLog();
-		OutputStockBonusesLog();
-		OutputStatLog();
-	}
-}
-
-void ABaseCharacter::EquipGrip(const FGripStats NewGripStats)
-{
-	// If weapon component exists, change the grip's stats to the new one. Then, calculate the gun's new final stats
-	if(WeaponComponent != nullptr)
-	{
-		WeaponComponent -> SetGripStats(NewGripStats);
-		WeaponComponent -> SetFinalStats();
-		CheckStatCap();
-		OutputWeaponStatLog();
-		OutputBarrelBonusesLog();
-		OutputSightsBonusesLog();
-		OutputMagazineBonusesLog();
-		OutputGripBonusesLog();
-		OutputStockBonusesLog();
-		OutputStatLog();
-	}
-}
-
-void ABaseCharacter::EquipStock(const FStockStats NewStockStats)
-{
-	// If weapon component exists, change the grip's stats to the new one. Then, calculate the gun's new final stats
-	if(WeaponComponent != nullptr)
-	{ 
-		WeaponComponent -> SetStockStats(NewStockStats);
-		WeaponComponent -> SetFinalStats();
-		CheckStatCap();
-		OutputWeaponStatLog();
-        OutputBarrelBonusesLog();
-        OutputSightsBonusesLog();
-        OutputMagazineBonusesLog();
-		OutputGripBonusesLog();
-		OutputStockBonusesLog();
-		OutputStatLog();
-	}
-}
-*/
-
-// Called to bind functionality to input
-void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-void ABaseCharacter::EquipWeaponImplementation(bool bEquipWeapon, const FWeaponStats& WeaponStats)
-{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABaseCharacter, WeaponComponent);
 	
 }
 
-void ABaseCharacter::MulticastEquipWeapon_Implementation(bool bEquipWeapon, const FWeaponStats& WeaponStats)
+void ABaseCharacter::MulticastEquipWeapon_Implementation(bool bEquipWeapon)
 {
-	
+	EquipWeaponGraphical(bEquipWeapon);
 }
 
