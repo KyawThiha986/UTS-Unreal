@@ -18,6 +18,18 @@ void UPickupManagerSystem::PopulateSpawnLocations()
 
 void UPickupManagerSystem::SpawnPickups()
 {
+	if (GetWorld()->GetNetMode() == NM_DedicatedServer)
+	{
+		MulticastSpawnPickup();
+	}
+	else if (GetWorld()->GetNetMode() == NM_ListenServer)
+	{
+		MulticastSpawnPickup_Implementation();
+	}
+}
+
+void UPickupManagerSystem::SpawnPickupsImplementation()
+{
 	//If possible spawn locations array is empty, write a log and return nothing
 	if (PossibleSpawnLocations.IsEmpty())
 	{
@@ -25,54 +37,24 @@ void UPickupManagerSystem::SpawnPickups()
 		return;
 	}
 	//Otherwise, Spawn a pickup at a position designated by random range
-	if (const UAGPGameInstance* GameInstance =
-	GetWorld()->GetGameInstance<UAGPGameInstance>())
-	{
-		FVector SpawnPosition =
-		PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-		
-		AWeaponPickup* WeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(
-		GameInstance->GetWeaponPickupClass(),SpawnPosition,FRotator::ZeroRotator);
+    if (const UAGPGameInstance* GameInstance =
+    GetWorld()->GetGameInstance<UAGPGameInstance>())
+    {
+    	FVector SpawnPosition =
+    	PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
+    	1)];
+    	SpawnPosition.Z += 50.0f;
+    	AWeaponPickup* WeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(
+    	GameInstance->GetWeaponPickupClass(),SpawnPosition,FRotator::ZeroRotator);
+    	SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
+    	1)];
+    	SpawnPosition.Z += 50.0f;
+    }
+}
 
-		SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-
-		/*
-		ABarrelPickup* BarrelPickup = GetWorld()->SpawnActor<ABarrelPickup>(
-		GameInstance->GetBarrelPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-
-		SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-
-		ASightsPickup* SightsPickup = GetWorld()->SpawnActor<ASightsPickup>(
-		GameInstance->GetSightsPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-
-		SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-
-		AMagazinePickup* MagazinePickup = GetWorld()->SpawnActor<AMagazinePickup>(
-		GameInstance->GetMagazinePickupClass(),SpawnPosition,FRotator::ZeroRotator);
-
-		SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-
-		AGripPickup* GripPickup = GetWorld()->SpawnActor<AGripPickup>(
-		GameInstance->GetGripPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-
-		SpawnPosition = PossibleSpawnLocations[FMath::RandRange(0, PossibleSpawnLocations.Num()-
-		1)];
-		SpawnPosition.Z += 50.0f;
-
-		AStockPickup* StockPickup = GetWorld()->SpawnActor<AStockPickup>(
-		GameInstance->GetStockPickupClass(),SpawnPosition,FRotator::ZeroRotator);
-		*/
-	}
+void UPickupManagerSystem::MulticastSpawnPickup_Implementation()
+{
+	SpawnPickupsImplementation();
 }
 
 void UPickupManagerSystem::Tick(float DeltaTime)

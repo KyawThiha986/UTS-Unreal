@@ -4,6 +4,12 @@
 #include "WeaponPickup.h"
 
 #include "../Characters/PlayerCharacter.h"
+#include "Net/UnrealNetwork.h"
+
+AWeaponPickup::AWeaponPickup()
+{
+	bReplicates = true;
+}
 
 void AWeaponPickup::BeginPlay()
 {
@@ -25,39 +31,10 @@ void AWeaponPickup::OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void AWeaponPickup::GenerateWeaponPickup()
 {
-	float Odds = FMath::RandRange(0, 100);
-
-	if(Odds <= 5.0f)
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		WeaponRarity = EWeaponRarity::Legendary;
-		MaxRoll = 4;
-		RollStats();
+		ServerGenerateWeaponPickup_Implementation();
 	}
-
-	else if(Odds > 5.0f && Odds <= 20.0f)
-	{
-		WeaponRarity = EWeaponRarity::Master;
-		MaxRoll = 3;
-		RollStats();
-	}
-
-	else if(Odds > 20.0f && Odds <= 50.0f)
-	{
-		WeaponRarity = EWeaponRarity::Rare;
-		MaxRoll = 2;
-		RollStats();
-	}
-
-	else
-	{
-		WeaponRarity = EWeaponRarity::Common;
-		WeaponPickupStats.Accuracy = FMath::RandRange(0.875f, 0.925f);
-		WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
-		WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
-		WeaponPickupStats.MagazineSize = FMath::RandRange(6, 12);
-		WeaponPickupStats.ReloadTime = FMath::RandRange(3.0f, 4.0f);
-	}
-	//Determine the stats depending on whether it is good or bad
 }
 
 void AWeaponPickup::RollStats()
@@ -120,3 +97,54 @@ void AWeaponPickup::RollStats()
 		}		
 	}
 }
+
+void AWeaponPickup::GenerateWeaponPickupImplementation()
+{
+	float Odds = FMath::RandRange(0, 100);
+
+	if(Odds <= 5.0f)
+	{
+		WeaponRarity = EWeaponRarity::Legendary;
+		MaxRoll = 4;
+		RollStats();
+	}
+
+	else if(Odds > 5.0f && Odds <= 20.0f)
+	{
+		WeaponRarity = EWeaponRarity::Master;
+		MaxRoll = 3;
+		RollStats();
+	}
+
+	else if(Odds > 20.0f && Odds <= 50.0f)
+	{
+		WeaponRarity = EWeaponRarity::Rare;
+		MaxRoll = 2;
+		RollStats();
+	}
+
+	else
+	{
+		WeaponRarity = EWeaponRarity::Common;
+		WeaponPickupStats.Accuracy = FMath::RandRange(0.875f, 0.925f);
+		WeaponPickupStats.FireRate = FMath::RandRange(0.4f, 0.5f);
+		WeaponPickupStats.BaseDamage = FMath::RandRange(5.0f, 10.0f);
+		WeaponPickupStats.MagazineSize = FMath::RandRange(6, 12);
+		WeaponPickupStats.ReloadTime = FMath::RandRange(3.0f, 4.0f);
+	}
+	//Determine the stats depending on whether it is good or bad
+}
+
+void AWeaponPickup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AWeaponPickup, WeaponRarity);
+	DOREPLIFETIME(AWeaponPickup, WeaponPickupStats);
+}
+
+void AWeaponPickup::ServerGenerateWeaponPickup_Implementation()
+{
+	GenerateWeaponPickupImplementation();
+}
+
+

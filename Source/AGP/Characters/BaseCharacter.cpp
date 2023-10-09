@@ -99,7 +99,6 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ABaseCharacter, WeaponComponent);
-	
 }
 
 void ABaseCharacter::MulticastEquipWeapon_Implementation(bool bEquipWeapon)

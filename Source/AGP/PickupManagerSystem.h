@@ -28,5 +28,10 @@ class AGP_API UPickupManagerSystem : public UTickableWorldSubsystem
 	
 	private:
 	void SpawnPickups();
+	void SpawnPickupsImplementation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSpawnPickup();
+	
 	void Tick(float DeltaTime) override;
 };

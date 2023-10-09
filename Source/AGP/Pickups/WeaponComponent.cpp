@@ -91,17 +91,17 @@ bool UWeaponComponent::FireImplementation(const FVector& BulletStart, const FVec
 				{
 					HitCharacterHealth->ApplyDamage(FinalWeaponStats.BaseDamage);
 				}
-				//DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
+				DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
 			}
 			else
 			{
-				//DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Orange, false, 1.0f);
+				DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Orange, false, 1.0f);
 			}
     		
 		}
 		else
 		{
-			//DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
+			DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
 			OutHitLocation = AccuracyAdjustedFireAt;
 		}
 		TimeSinceLastShot = 0.0f;
