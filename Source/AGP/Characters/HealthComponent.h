@@ -31,6 +31,7 @@ protected:
 	bool bIsDead = false;
 
 	void OnDeath();
+	void UpdateHealthBar();
 
 public:	
 	// Called every frame

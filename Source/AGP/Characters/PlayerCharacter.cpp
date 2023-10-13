@@ -5,6 +5,8 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HealthComponent.h"
+#include "AGP/PlayerCharacterHUD.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -19,7 +21,9 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	
+	
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -27,6 +31,19 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
+
+	if (IsLocallyControlled() && PlayerHUDClass)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
+			if (PlayerHUD)
+			{
+				PlayerHUD -> AddToPlayerScreen();
+			}
+		}
+	}
+	UpdateHealthBar(1.0f);
 }
 
 // Called every frame
@@ -48,6 +65,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		Input->BindAction(FireAction, ETriggerEvent::Triggered, this, &APlayerCharacter::FireWeapon);
 		Input->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Reload);
+	}
+}
+
+void APlayerCharacter::UpdateHealthBar(float HealthPercent)
+{
+	if (IsLocallyControlled())
+	{
+		if (PlayerHUD != nullptr)
+		{
+			PlayerHUD -> SetHealthBar(HealthPercent);			
+		}
 	}
 }
 

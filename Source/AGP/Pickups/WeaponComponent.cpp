@@ -89,7 +89,7 @@ bool UWeaponComponent::FireImplementation(const FVector& BulletStart, const FVec
 			{
 				if (UHealthComponent* HitCharacterHealth = HitCharacter->GetComponentByClass<UHealthComponent>())
 				{
-					HitCharacterHealth->ApplyDamage(FinalWeaponStats.BaseDamage);
+					HitCharacterHealth->ApplyDamage(WeaponStats.BaseDamage);
 				}
 				DrawDebugLine(GetWorld(), BulletStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
 			}

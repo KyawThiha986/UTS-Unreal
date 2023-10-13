@@ -3,6 +3,8 @@
 
 #include "HealthComponent.h"
 
+#include "PlayerCharacter.h"
+
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
@@ -37,6 +39,7 @@ void UHealthComponent::ApplyDamage(float DamageAmount)
 		OnDeath();
 		CurrentHealth = 0.0f;
 	}
+	UpdateHealthBar();
 }
 
 void UHealthComponent::ApplyHealing(float HealingAmount)
@@ -47,6 +50,7 @@ void UHealthComponent::ApplyHealing(float HealingAmount)
 	{
 		CurrentHealth = 100.0f;
 	}
+	UpdateHealthBar();
 }
 
 
@@ -64,6 +68,15 @@ void UHealthComponent::OnDeath()
 {
 	UE_LOG(LogTemp, Display, TEXT("The character has died."))
 	bIsDead = true;
+}
+
+void UHealthComponent::UpdateHealthBar()
+{
+	APlayerCharacter* Player =  Cast<APlayerCharacter>(GetOwner());
+	if (Player != nullptr)
+	{
+		Player -> UpdateHealthBar(GetCurrentHealthPercentage());		
+	}
 }
 
 // Called every frame
