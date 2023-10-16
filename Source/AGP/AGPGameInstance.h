@@ -1,12 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "Pickups/WeaponPickup.h"
 #include "AGPGameInstance.generated.h"
 
+class AWeaponPickup;
 /**
  * 
  */
@@ -15,29 +14,13 @@ class AGP_API UAGPGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-	public:
+public:
+
 	UClass* GetWeaponPickupClass() const;
-	/*
-	UClass* GetBarrelPickupClass() const;
-	UClass* GetSightsPickupClass() const;
-	UClass* GetMagazinePickupClass() const;
-	UClass* GetGripPickupClass() const;
-	UClass* GetStockPickupClass() const;
-	*/
-	
-	protected:
+
+protected:
+
 	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
 	TSubclassOf<AWeaponPickup> WeaponPickupClass;
-	/*
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
-	TSubclassOf<ABarrelPickup> BarrelPickupClass;
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
-	TSubclassOf<ASightsPickup> SightsPickupClass;
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
-	TSubclassOf<AMagazinePickup> MagazinePickupClass;
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
-	TSubclassOf<AGripPickup> GripPickupClass;
-	UPROPERTY(EditDefaultsOnly, Category="Pickup Classes")
-	TSubclassOf<AStockPickup> StockPickupClass;
-	*/
+	
 };

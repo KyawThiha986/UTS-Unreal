@@ -6,10 +6,9 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.h"
 #include "InputActionValue.h"
-#include "../Pickups/WeaponComponent.h"
-#include "../PlayerCharacterHUD.h"
 #include "PlayerCharacter.generated.h"
 
+class UPlayerCharacterHUD;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -22,9 +21,17 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
+	void UpdateHealthBar(float HealthPercent);
+	void UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChooseCharacterMesh();
+	void DrawUI();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* MoveAction;
@@ -44,9 +51,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UPlayerCharacterHUD> PlayerHUDClass;
-
 	UPROPERTY()
 	UPlayerCharacterHUD* PlayerHUD;
+	
+	
 
 public:	
 	// Called every frame
@@ -54,14 +62,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void UpdateHealthBar(float HealthPercent);
-	void UpdateAmmoCount(int32 CurrentAmmo, int32 MaxAmmo);
 	
 private:
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void FireWeapon(const FInputActionValue& Value);
-	void Reload(const FInputActionValue& Value);
+
 };

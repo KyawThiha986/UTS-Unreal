@@ -21,6 +21,9 @@ public:
 	float GetCurrentHealthPercentage() const;
 	void ApplyDamage(float DamageAmount);
 	void ApplyHealing(float HealingAmount);
+	void ResetHealth();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	// Called when the game starts
@@ -28,19 +31,19 @@ protected:
 
 	UPROPERTY(Replicated)
 	float MaxHealth = 100.0f;
-	UPROPERTY(ReplicatedUsing = RepCurrentHealth)
+	UPROPERTY(ReplicatedUsing=UpdateHealthBar)
 	float CurrentHealth;
 	bool bIsDead = false;
 
 	void OnDeath();
+	UFUNCTION()
 	void UpdateHealthBar();
 
-	UFUNCTION()
-	void RepCurrentHealth();
+	
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+		
 };

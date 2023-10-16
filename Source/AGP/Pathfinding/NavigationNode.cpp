@@ -6,13 +6,15 @@
 // Sets default values
 ANavigationNode::ANavigationNode()
 {
-	bNetLoadOnClient = false;
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	bNetLoadOnClient = false;
+
 	LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
 	SetRootComponent(LocationComponent);
+	
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +29,7 @@ void ANavigationNode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FColor SphereColor = FColor::Blue;
+	/*FColor SphereColor = FColor::Blue;
 	if (ConnectedNodes.Contains(this))
 	{
 		SphereColor = FColor::Red;
@@ -44,9 +46,10 @@ void ANavigationNode::Tick(float DeltaTime)
 			{
 				LineColor = FColor::Green;
 			}
-			DrawDebugLine(GetWorld(), GetActorLocation(), ConnectedNode->GetActorLocation(),LineColor, false, -1, 0, 5.0f);
+			DrawDebugLine(GetWorld(), GetActorLocation(), ConnectedNode->GetActorLocation(),
+				LineColor, false, -1, 0, 5.0f);
 		}
-	}
+	}*/
 }
 
 bool ANavigationNode::ShouldTickIfViewportsOnly() const

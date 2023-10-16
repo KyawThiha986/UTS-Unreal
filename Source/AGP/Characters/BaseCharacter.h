@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WeaponComponent.h"
 #include "GameFramework/Character.h"
-#include "../Pickups/WeaponComponent.h"
 #include "BaseCharacter.generated.h"
 
 class UHealthComponent;
@@ -21,10 +21,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasWeapon();
 
-	void EquipWeapon(bool bEquipWeapon, const FWeaponStats NewWeaponStats);
+	void EquipWeapon(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
 	UFUNCTION(BlueprintImplementableEvent)
 	void EquipWeaponGraphical(bool bEquipWeapon);
-	bool IsWeaponEquipped = false;
+
+	/**
+	 * Will reload the weapon if the character has a weapon equipped.
+	 */
+	void Reload();
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void OnDeath();
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,52 +46,25 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BulletStartPosition;
 
+	/**
+	 * A component that holds information about the health of the character. This component has functions
+	 * for damaging the character and healing the character.
+	 */
 	UPROPERTY(VisibleAnywhere)
 	UHealthComponent* HealthComponent;
+
+	/**
+	 * An actor component that controls the logic for this characters equipped weapon.
+	 */
+	UPROPERTY(Replicated)
+	UWeaponComponent* WeaponComponent = nullptr;
 
 	/**
 	 * Will fire at a specific location and handles the impact of the shot such as determining what it hit and
 	 * deducting health if it hit a particular type of actor.
 	 * @param FireAtLocation The location that you want to fire at.
-	 * @return true if a shot was taken and false otherwise.
 	 */
 	void Fire(const FVector& FireAtLocation);
-	void CheckStatCap()
-	{
-		if(WeaponComponent -> WeaponStats.Accuracy > 0.999f)
-		{
-			WeaponComponent -> WeaponStats.Accuracy = 0.999f;
-		}
-		
-		if(WeaponComponent -> WeaponStats.FireRate < 0.015f)
-		{
-			WeaponComponent -> WeaponStats.FireRate = 0.015f;
-		}
-		
-		if(WeaponComponent -> WeaponStats.ReloadTime < 0.2f)
-		{
-			WeaponComponent -> WeaponStats.ReloadTime = 0.2f;
-		}
-	};
-
-	void OutputWeaponStatLog()
-	{
-		AccuracyPercentage = WeaponComponent -> WeaponStats.Accuracy * 100.0f;
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Stats"));
-		UE_LOG(LogTemp, Log, TEXT("Accuracy: %f%%"), AccuracyPercentage);
-		UE_LOG(LogTemp, Log, TEXT("FireRate: %fs"), WeaponComponent -> WeaponStats.FireRate);
-		UE_LOG(LogTemp, Log, TEXT("BaseDamage: %f"), WeaponComponent -> WeaponStats.BaseDamage);
-		UE_LOG(LogTemp, Log, TEXT("Magazine Size: %i"), WeaponComponent -> WeaponStats.MagazineSize);
-		UE_LOG(LogTemp, Log, TEXT("Reload Time: %fs"), WeaponComponent -> WeaponStats.ReloadTime);
-	}
-	
-	UPROPERTY(Replicated)
-	UWeaponComponent* WeaponComponent = nullptr;
-
-	int32 Ammo;
-	bool IsReloading = false;
-	float CurrentReloadTime;
-	float EnemyReloadTime; 
 
 public:	
 	// Called every frame
@@ -93,14 +74,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	float BulletsPerSecond;
-	float AccuracyPercentage;
-
-	void EquipWeaponImplementation(bool bEquipWeapon,
-	const FWeaponStats& WeaponStats = FWeaponStats());
-	
+	void EquipWeaponImplementation(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastEquipWeapon(bool bEquipWeapon);
+	void MulticastEquipWeapon(bool bEquipWeapon, const FWeaponStats& WeaponStats = FWeaponStats());
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

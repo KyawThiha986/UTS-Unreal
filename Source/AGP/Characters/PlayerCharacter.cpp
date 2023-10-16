@@ -6,7 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "HealthComponent.h"
-#include "AGP/PlayerCharacterHUD.h"
+#include "PlayerCharacterHUD.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -16,12 +16,44 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+void APlayerCharacter::UpdateHealthBar(float HealthPercent)
+{
+	if (PlayerHUD && IsLocallyControlled())
+	{
+		PlayerHUD->SetHealthBar(HealthPercent);
+	}
+}
+
+void APlayerCharacter::UpdateAmmoUI(int32 RoundsRemaining, int32 MagazineSize)
+{
+	if (PlayerHUD && IsLocallyControlled())
+	{
+		PlayerHUD->SetAmmoText(RoundsRemaining, MagazineSize);
+	}
+}
+
+void APlayerCharacter::DrawUI()
+{
+	if (IsLocallyControlled() && PlayerHUDClass)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
+			if (PlayerHUD)
+			{
+				PlayerHUD->AddToPlayerScreen();
+			}
+		}
+	}
+	UpdateHealthBar(1.0f);
+}
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+
+	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -30,19 +62,16 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
-	if (IsLocallyControlled() && PlayerHUDClass)
+	DrawUI();
+}
+
+void APlayerCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	if (PlayerHUD)
 	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-		{
-			PlayerHUD = CreateWidget<UPlayerCharacterHUD>(PlayerController, PlayerHUDClass);
-			if (PlayerHUD)
-			{
-				PlayerHUD -> AddToPlayerScreen();
-			}
-		}
+		PlayerHUD->RemoveFromParent();
 	}
-	UpdateHealthBar(1.0f);
-	UpdateAmmoCount(0, 0);
 }
 
 // Called every frame
@@ -63,26 +92,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		Input->BindAction(FireAction, ETriggerEvent::Triggered, this, &APlayerCharacter::FireWeapon);
-		Input->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Reload);
+		Input->BindAction(ReloadAction, ETriggerEvent::Started, this, &ABaseCharacter::Reload);
 	}
-}
-
-void APlayerCharacter::UpdateHealthBar(float HealthPercent)
-{
-	if (IsLocallyControlled())
-	{
-		if (PlayerHUD != nullptr)
-		{
-			PlayerHUD -> SetHealthBar(HealthPercent);			
-		}
-	}
-}
-
-void APlayerCharacter::UpdateAmmoCount(int32 CurrentAmmo, int32 MaxAmmo)
-{
-	if (!IsLocallyControlled() || !PlayerHUD) return;
-
-	PlayerHUD -> SetAmmoCount(CurrentAmmo, MaxAmmo);
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -112,13 +123,4 @@ void APlayerCharacter::FireWeapon(const FInputActionValue& Value)
 		Fire(BulletStartPosition->GetComponentLocation() + 10000.0f * CameraForward);
 	}
 }
-
-void APlayerCharacter::Reload(const FInputActionValue& Value)
-{
-	if(WeaponComponent != nullptr)
-	{
-		WeaponComponent->Reload();
-	}
-}
-
 

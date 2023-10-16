@@ -115,7 +115,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	bool OuttaAmmo = false;
 
 private:
 	
@@ -125,10 +124,4 @@ private:
 	 */
 	APlayerCharacter* FindPlayer() const;
 
-	/*
-	void DoEverything();
-	void DoEverythingImplementation();
-	UFUNCTION(Server, Reliable)
-	void ServerDoEverything();
-	*/
 };

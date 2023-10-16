@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "WeaponComponent.h"
+
+#include "CoreMinimal.h"
+#include "PickupBase.h"
+#include "AGP/Characters/WeaponComponent.h"
+#include "WeaponPickup.generated.h"
 
 UENUM(BlueprintType)
 enum class EWeaponRarity : uint8
@@ -12,10 +16,6 @@ enum class EWeaponRarity : uint8
 	Legendary
 };
 
-#include "CoreMinimal.h"
-#include "PickupBase.h"
-#include "WeaponPickup.generated.h"
-
 /**
  * 
  */
@@ -24,32 +24,26 @@ class AGP_API AWeaponPickup : public APickupBase
 {
 	GENERATED_BODY()
 
-public:
-	
-	AWeaponPickup();
-	
 protected:
-	
+
+	UPROPERTY(BlueprintReadOnly, Replicated)
+	EWeaponRarity WeaponRarity = EWeaponRarity::Common;
+	UPROPERTY(Replicated)
+	FWeaponStats WeaponStats;
+
 	virtual void BeginPlay() override;
-	
 	virtual void OnPickupOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& HitInfo) override;
 
-	UPROPERTY(Replicated, BlueprintReadWrite)
-	EWeaponRarity WeaponRarity = EWeaponRarity::Common;
-
-	UPROPERTY(Replicated)
-	FWeaponStats WeaponPickupStats;
-	void GenerateWeaponPickup();
-	void RollStats();
-	
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateWeaponPickupMaterial();
-	int32 MaxRoll;
 
-	//Server
-	void GenerateWeaponPickupImplementation();
-	UFUNCTION(Server, Reliable)
-	void ServerGenerateWeaponPickup();
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+private:
+
+	void GenerateWeaponPickup();
+	EWeaponRarity WeaponRarityPicker();
+	TArray<bool> WeaponStatPicker(int32 NumOfGood, int32 NumOfStats);
+	
 };
