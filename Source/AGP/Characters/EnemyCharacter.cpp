@@ -38,7 +38,6 @@ void AEnemyCharacter::BeginPlay()
 			PawnSensingComponent->OnSeePawn.AddDynamic(this, &AEnemyCharacter::OnSensedPawn);
 		}
 	}
-		
 }
 
 void AEnemyCharacter::MoveAlongPath()
@@ -72,7 +71,6 @@ void AEnemyCharacter::TickPatrol()
 
 void AEnemyCharacter::TickEngage()
 {
-	
 	if (!SensedCharacter) return;
 	
 	if (CurrentPath.IsEmpty())
@@ -182,8 +180,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			}
 			break;
 		}		
-	}
-	UpdateSight();
+	}w
 }
 
 // Called to bind functionality to input
