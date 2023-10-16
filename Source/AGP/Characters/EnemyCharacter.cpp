@@ -180,7 +180,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			}
 			break;
 		}		
-	}w
+	}
 }
 
 // Called to bind functionality to input
