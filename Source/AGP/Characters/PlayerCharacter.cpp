@@ -20,8 +20,6 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 	
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -44,6 +42,7 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 	UpdateHealthBar(1.0f);
+	UpdateAmmoCount(0, 0);
 }
 
 // Called every frame
@@ -77,6 +76,13 @@ void APlayerCharacter::UpdateHealthBar(float HealthPercent)
 			PlayerHUD -> SetHealthBar(HealthPercent);			
 		}
 	}
+}
+
+void APlayerCharacter::UpdateAmmoCount(int32 CurrentAmmo, int32 MaxAmmo)
+{
+	if (!IsLocallyControlled() || !PlayerHUD) return;
+
+	PlayerHUD -> SetAmmoCount(CurrentAmmo, MaxAmmo);
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)

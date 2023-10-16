@@ -85,7 +85,10 @@ void ABaseCharacter::EquipWeaponImplementation(bool bEquipWeapon, const FWeaponS
 	{
 		// Set the weapons stats to the given weapon stats.
 		WeaponComponent -> SetWeaponStats(NewWeaponStats);
-		WeaponComponent -> Ammo = WeaponComponent -> WeaponStats.MagazineSize;
+		WeaponComponent -> MagSize = WeaponComponent -> WeaponStats.MagazineSize;
+		WeaponComponent -> Ammo = WeaponComponent -> MagSize;
+		WeaponComponent -> Reload();
+		WeaponComponent -> CurrentReloadTime = WeaponComponent -> WeaponStats.ReloadTime;
 		CheckStatCap();
 		if(WeaponComponent)
 		{

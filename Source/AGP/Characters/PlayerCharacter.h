@@ -56,6 +56,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void UpdateHealthBar(float HealthPercent);
+	void UpdateAmmoCount(int32 CurrentAmmo, int32 MaxAmmo);
 	
 private:
 	

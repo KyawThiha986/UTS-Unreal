@@ -6,6 +6,7 @@
 #include "../Characters/BaseCharacter.h"
 #include "../Characters/EnemyCharacter.h"
 #include "AGP/Characters/HealthComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 
@@ -35,10 +36,14 @@ void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 	if (CurrentReloadTime > WeaponStats.ReloadTime && IsReloading == true)
 	{
-		Ammo = WeaponStats.MagazineSize;
+		MagSize = WeaponStats.MagazineSize;
+		Ammo = MagSize;
 		IsReloading = false;
 		UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded!"));
+		UE_LOG(LogTemp, Log, TEXT("Ammo Left: %i"), Ammo);
+		UpdateAmmoCount();
 	}
+	//UpdateAmmoCount();
 }
 
 void UWeaponComponent::Fire(const FVector& BulletStart, const FVector& FireAtLocation)
@@ -49,11 +54,13 @@ void UWeaponComponent::Fire(const FVector& BulletStart, const FVector& FireAtLoc
 		if(FireImplementation(BulletStart, FireAtLocation, OutHitLocation))
 		{
 			MulticastFire(BulletStart, OutHitLocation);
+			UpdateAmmoCount();
 		}
 	}
 	else if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy)
 	{
 		ServerFire(BulletStart, FireAtLocation);
+		UpdateAmmoCount();
 	}
 }
 
@@ -79,6 +86,8 @@ bool UWeaponComponent::FireImplementation(const FVector& BulletStart, const FVec
 	
 	if (Ammo > 0)
 	{
+		Ammo -= 1;
+		TimeSinceLastShot = 0.0f;
 		FHitResult HitResult;
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(GetOwner());
@@ -104,8 +113,6 @@ bool UWeaponComponent::FireImplementation(const FVector& BulletStart, const FVec
 			DrawDebugLine(GetWorld(), BulletStart, AccuracyAdjustedFireAt, FColor::Red, false, 1.0f);
 			OutHitLocation = AccuracyAdjustedFireAt;
 		}
-		TimeSinceLastShot = 0.0f;
-		Ammo -= 1;
 		return true;
 	}
 	else
@@ -129,6 +136,14 @@ void UWeaponComponent::ReloadImplementation()
 	}
 	CurrentReloadTime = 0.0f;
 	Ammo = 0;
+}
+
+void UWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UWeaponComponent, WeaponStats);
+	DOREPLIFETIME(UWeaponComponent, Ammo);
+	DOREPLIFETIME(UWeaponComponent, MagSize);
 }
 
 void UWeaponComponent::ServerReload_Implementation()
@@ -161,5 +176,24 @@ void UWeaponComponent::Reload()
 	{
 		ServerReload();
 	}
+	UpdateAmmoCount();
+	if (CurrentReloadTime > WeaponStats.ReloadTime && IsReloading == true)
+	{
+		UpdateAmmoCount();
+	}
+}
+
+void UWeaponComponent::UpdateAmmoCount()
+{
+	APlayerCharacter* Player =  Cast<APlayerCharacter>(GetOwner());
+	if (Player != nullptr)
+	{
+		Player -> UpdateAmmoCount(Ammo, MagSize);		
+	}
+}
+
+void UWeaponComponent::RepAmmoCount()
+{
+	UpdateAmmoCount();
 }
 

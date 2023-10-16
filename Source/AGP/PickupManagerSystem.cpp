@@ -26,6 +26,10 @@ void UPickupManagerSystem::SpawnPickups()
 	{
 		MulticastSpawnPickup_Implementation();
 	}
+	else if (GetWorld()->GetNetMode() == NM_Standalone)
+	{
+		SpawnPickupsImplementation();
+	}
 }
 
 void UPickupManagerSystem::SpawnPickupsImplementation()

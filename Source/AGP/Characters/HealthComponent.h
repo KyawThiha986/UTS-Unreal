@@ -26,16 +26,21 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY(Replicated)
 	float MaxHealth = 100.0f;
+	UPROPERTY(ReplicatedUsing = RepCurrentHealth)
 	float CurrentHealth;
 	bool bIsDead = false;
 
 	void OnDeath();
 	void UpdateHealthBar();
 
+	UFUNCTION()
+	void RepCurrentHealth();
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

@@ -16,7 +16,7 @@ class AGP_API UPathfindingSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
-
+	
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 	/**
 	 * Will retrieve a path from the StartLocation, to a random position in the world's navigation system.
@@ -42,7 +42,7 @@ public:
 	TArray<FVector> GetWaypointPositions();
 	
 protected:
-
+	
 	TArray<ANavigationNode*> Nodes;
 
 private:

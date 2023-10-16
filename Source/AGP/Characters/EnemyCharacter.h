@@ -125,4 +125,10 @@ private:
 	 */
 	APlayerCharacter* FindPlayer() const;
 
+	/*
+	void DoEverything();
+	void DoEverythingImplementation();
+	UFUNCTION(Server, Reliable)
+	void ServerDoEverything();
+	*/
 };

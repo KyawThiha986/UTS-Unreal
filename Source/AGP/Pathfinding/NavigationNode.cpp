@@ -6,13 +6,13 @@
 // Sets default values
 ANavigationNode::ANavigationNode()
 {
+	bNetLoadOnClient = false;
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
 	SetRootComponent(LocationComponent);
-	
 }
 
 // Called when the game starts or when spawned

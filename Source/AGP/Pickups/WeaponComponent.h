@@ -20,20 +20,9 @@ public:
 	float Accuracy = 0.9f;
 	float FireRate = 0.5f;
 	float BaseDamage = 10.0f;
+	UPROPERTY()
 	int32 MagazineSize = 8;
 	float ReloadTime = 4.0f;
-};
-
-USTRUCT(BlueprintType)
-struct FFinalWeaponStats
-{
-	GENERATED_BODY()
-public:
-	float Accuracy = 0.0f;
-	float FireRate = 0.0f;
-	float BaseDamage = 0.0f;
-	int32 MagazineSize = 0;
-	float ReloadTime = 0.0f;
 };
 
 UCLASS()
@@ -52,7 +41,10 @@ public:
 		WeaponStats.MagazineSize = NewWeaponStats.MagazineSize;
 		WeaponStats.ReloadTime = NewWeaponStats.ReloadTime;
 	}
-	
+
+	UPROPERTY(Replicated)
+	int32 MagSize = WeaponStats.MagazineSize;
+	UPROPERTY(ReplicatedUsing = RepAmmoCount)
 	int32 Ammo;
 	bool IsReloading = false;
 	float CurrentReloadTime;
@@ -60,10 +52,8 @@ public:
 	void Reload();
 
 	//Declare stats for weapon and attachments
+	UPROPERTY(Replicated)
 	FWeaponStats WeaponStats;
-
-	//Declare combined stats
-	FFinalWeaponStats FinalWeaponStats;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -72,6 +62,10 @@ protected:
 	int32 RoundsRemainingInMagazine;
 	float TimeSinceLastShot = 0.0f;
 
+	void UpdateAmmoCount();
+	UFUNCTION()
+	void RepAmmoCount();
+	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -84,8 +78,11 @@ private:
 	void MulticastFire(const FVector& BulletStart, const FVector& HitLocation);
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector& BulletStart, const FVector& FireAtLocation);
+	
 	void ReloadImplementation();
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 };

@@ -23,18 +23,22 @@ void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
-	if (PathfindingSubsystem)
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
-	} else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
+		PathfindingSubsystem = GetWorld()->GetSubsystem<UPathfindingSubsystem>();
+		if (PathfindingSubsystem)
+		{
+			CurrentPath = PathfindingSubsystem->GetRandomPath(GetActorLocation());
+		} else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Unable to find the PathfindingSubsystem"))
+		}
+		if (PawnSensingComponent)
+		{
+			PawnSensingComponent->OnSeePawn.AddDynamic(this, &AEnemyCharacter::OnSensedPawn);
+		}
 	}
-	if (PawnSensingComponent)
-	{
-		PawnSensingComponent->OnSeePawn.AddDynamic(this, &AEnemyCharacter::OnSensedPawn);
-	}
+		
 }
 
 void AEnemyCharacter::MoveAlongPath()
@@ -135,47 +139,51 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateSight();
-	
-	switch(CurrentState)
+	if(GetLocalRole() == ROLE_Authority)
 	{
-	case EEnemyState::Patrol:
-		TickPatrol();
-		if (SensedCharacter)
+		UpdateSight();
+		
+		switch(CurrentState)
 		{
+		case EEnemyState::Patrol:
+			TickPatrol();
+			if (SensedCharacter)
+			{
+				if (HealthComponent->GetCurrentHealthPercentage() >= 0.4f)
+				{
+					CurrentState = EEnemyState::Engage;
+				} else
+				{
+					CurrentState = EEnemyState::Evade;
+				}
+				CurrentPath.Empty();
+			}
+			break;
+		case EEnemyState::Engage:
+			TickEngage();
+			if (HealthComponent->GetCurrentHealthPercentage() < 0.4f)
+			{
+				CurrentPath.Empty();
+				CurrentState = EEnemyState::Evade;
+			} else if (!SensedCharacter)
+			{
+				CurrentState = EEnemyState::Patrol;
+			}
+			break;
+		case EEnemyState::Evade:
+			TickEvade();
 			if (HealthComponent->GetCurrentHealthPercentage() >= 0.4f)
 			{
+				CurrentPath.Empty();
 				CurrentState = EEnemyState::Engage;
-			} else
+			} else if (!SensedCharacter)
 			{
-				CurrentState = EEnemyState::Evade;
+				CurrentState = EEnemyState::Patrol;
 			}
-			CurrentPath.Empty();
-		}
-		break;
-	case EEnemyState::Engage:
-		TickEngage();
-		if (HealthComponent->GetCurrentHealthPercentage() < 0.4f)
-		{
-			CurrentPath.Empty();
-			CurrentState = EEnemyState::Evade;
-		} else if (!SensedCharacter)
-		{
-			CurrentState = EEnemyState::Patrol;
-		}
-		break;
-	case EEnemyState::Evade:
-		TickEvade();
-		if (HealthComponent->GetCurrentHealthPercentage() >= 0.4f)
-		{
-			CurrentPath.Empty();
-			CurrentState = EEnemyState::Engage;
-		} else if (!SensedCharacter)
-		{
-			CurrentState = EEnemyState::Patrol;
-		}
-		break;
+			break;
+		}		
 	}
+	UpdateSight();
 }
 
 // Called to bind functionality to input
@@ -199,4 +207,26 @@ APlayerCharacter* AEnemyCharacter::FindPlayer() const
 	}
 	return Player;
 }
+
+/*
+void AEnemyCharacter::DoEverything()
+{
+	if (GetNetMode() == ROLE_Authority)
+	{
+		ServerDoEverything_Implementation();
+	}
+}
+
+void AEnemyCharacter::DoEverythingImplementation()
+{
+	MoveAlongPath();
+}
+
+void AEnemyCharacter::ServerDoEverything_Implementation()
+{
+	DoEverythingImplementation();
+}
+*/
+
+
 

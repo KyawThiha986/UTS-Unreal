@@ -50,19 +50,19 @@ protected:
 	void Fire(const FVector& FireAtLocation);
 	void CheckStatCap()
 	{
-		if(WeaponComponent -> FinalWeaponStats.Accuracy > 0.999f)
+		if(WeaponComponent -> WeaponStats.Accuracy > 0.999f)
 		{
-			WeaponComponent -> FinalWeaponStats.Accuracy = 0.999f;
+			WeaponComponent -> WeaponStats.Accuracy = 0.999f;
 		}
 		
-		if(WeaponComponent -> FinalWeaponStats.FireRate < 0.015f)
+		if(WeaponComponent -> WeaponStats.FireRate < 0.015f)
 		{
-			WeaponComponent -> FinalWeaponStats.FireRate = 0.015f;
+			WeaponComponent -> WeaponStats.FireRate = 0.015f;
 		}
 		
-		if(WeaponComponent -> FinalWeaponStats.ReloadTime < 0.2f)
+		if(WeaponComponent -> WeaponStats.ReloadTime < 0.2f)
 		{
-			WeaponComponent -> FinalWeaponStats.ReloadTime = 0.2f;
+			WeaponComponent -> WeaponStats.ReloadTime = 0.2f;
 		}
 	};
 

@@ -28,9 +28,8 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* LocationComponent;
-
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

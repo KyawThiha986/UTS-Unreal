@@ -7,10 +7,8 @@
 #include "Components/ProgressBar.h"
 #include "PlayerCharacterHUD.generated.h"
 
+class UTextBlock;
 
-/**
- * 
- */
 UCLASS()
 class AGP_API UPlayerCharacterHUD : public UUserWidget
 {
@@ -18,8 +16,14 @@ class AGP_API UPlayerCharacterHUD : public UUserWidget
 
 public:
 	void SetHealthBar(float HealthPercent);
+	void SetAmmoCount(int32 AmmoCount, int32 MaxAmmoCount);
 	
 protected:
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
 	UProgressBar* HealthBar;
+
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	UTextBlock* Ammo;
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	UTextBlock* MaxAmmo;
 };
