@@ -126,7 +126,10 @@ void UWeaponComponent::FireVisualImplementation(const FVector& BulletStart, cons
 
 	AActor* OnSoundPlay = GetOwner();
 	APawn* SoundPlay = Cast<APawn>(OnSoundPlay);
-	
+
+	AActor* OnShootAnim = GetOwner();
+	ABaseCharacter* ShootAnim = Cast<ABaseCharacter>(OnShootAnim);
+	ShootAnim->FireWeaponGraphical();
 	if(SoundPlay->IsLocallyControlled())
 	{
 		GroundHit->PlayGunshotSound2D();
